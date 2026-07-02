@@ -42,7 +42,7 @@ public class EnvironmentBlocks {
     public static Block varcaudStalk, deadVarcaudStalk, qusGrass, kolFern, adreSprig, leafLitter, leafLitterDense, iceWater, clearWater, blueSandFLoor, blueSandWater, redSandFLoor, brecciaFloor, soil, fertileSoil,
             smoothBrecciaFloor, arsenideFloor, arsenideLayers, chertFloor,
             chertPlates, greenCoralFloor, BlueCoralFloor, redCoralFloor,
-            andesiteLayers, basaltSpikes, pinkSaltBoulder, algal_carpet, brine_liquid, lava, shallowSlag, shallowYellowstoneSlag, shallowSlagPlates, shallowLava,
+            andesiteLayers, basaltSpikes, basaltHolePlates, pinkSaltBoulder, algal_carpet, brine_liquid, lava, shallowSlag, shallowYellowstoneSlag, shallowSlagPlates, shallowLava,
             coral_floor,cupriteBoulder,cupriteWall,cupriteChunks, cupriteFloor, feldspar_vent, feldspar, ferric_extrusions,
             gabbro_extrusions, gabbro_vent, gabbro, petroleumFloor, petroleumSeep, geothermal_vent, rubble,
              metal13, metal14, metal15, metal16, roughFeldspar, glassFloor, feldsparPebbles, feldsparRubble, smoothFeldspar, phylite_floor, slate, ultrafamicFloor, brimstoneFloor, brimstoneVent,
@@ -56,7 +56,7 @@ public class EnvironmentBlocks {
              algalBloom, parzilPine, algalWall,
             bloom, blueCoralWall, redCoralWall, greenCoralWall,
             feldsparWall, gabbroWall, andesiteExtrusions, CrystalGalena,
-            elderParzil, ksaRoot, yulrCoral, bewCoral, herylBush, tranticaBush, regoubloom, tyrqPod, bigTyrqPod, basaltBluff, basaltOutcrop;
+            elderParzil, ksaRoot, yulrCoral, bewCoral, herylBush, tranticaBush, regoubloom, tyrqPod, bigTyrqPod, basaltBluff, basaltOutcrop, aquaslag;
 
     public static void loadContent() {
         //TODO fix the blend group
@@ -82,17 +82,17 @@ public class EnvironmentBlocks {
             supportsOverlay = true;
         }};
         shallowSlag = new Floor("shallow-slag") {{
-            speedMultiplier = 0.1f;
+            speedMultiplier = 0.25f;
             liquidDrop = Liquids.slag;
             liquidMultiplier = 0.5f;
             isLiquid = true;
             status = StatusEffects.burning;
             attributes.set(Attribute.heat, 0.8f);
-            //cacheLayer =  CacheLayer.slag;
+            cacheLayer =  CacheLayer.slag;
             variants = 5;
         }};
         shallowYellowstoneSlag = new Floor("shallow-yellowstone-slag") {{
-            speedMultiplier = 0.1f;
+            speedMultiplier = 0.25f;
             liquidDrop = Liquids.slag;
             liquidMultiplier = 0.5f;
             isLiquid = true;
@@ -107,11 +107,31 @@ public class EnvironmentBlocks {
             tilingSize = 4;
             liquidDrop = Liquids.slag;
             liquidMultiplier = 0.5f;
-            isLiquid = false;
+            isLiquid = true;
             status = StatusEffects.burning;
             attributes.set(Attribute.heat, 0.8f);
-            //cacheLayer =  CacheLayer.slag;
+            supportsOverlay = true;
+            overlayAlpha = 1;
+            cacheLayer =  CacheLayer.slag;
         }};
+        /*aquaslag = new Floor("aquaslag"){{
+            drownTime = 230f;
+            status = StatusEffects.melting;
+            statusDuration = 240f;
+            speedMultiplier = 0.19f;
+            variants = 0;
+            liquidDrop = Liquids.slag;
+            isLiquid = true;
+            cacheLayer = CacheLayer.slag;
+            attributes.set(Attribute.heat, 0.85f);
+            emitLight = true;
+            lightRadius = 40f;
+            lightColor = Color.orange.cpy().a(0.38f);
+            forceDrawLight = true;
+            drawEdgeOut = drawEdgeIn = true;
+            supportsOverlay = true;
+            overlayAlpha = 1;
+        }};*/
         ultrafamicFloor = new Floor("ultrafamic-floor", 3) {{
             wall = ultrafamicWall;
         }};
@@ -178,7 +198,6 @@ public class EnvironmentBlocks {
         overwrite(crystallineVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(yellowStoneVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(redStoneVent, (SteamVent s) -> s.effect = AquaFx.vent1);
-        overwrite(slag, (Floor s) -> s.drawEdgeOut = s.drawEdgeIn = true);
 
         feldspar_vent = new customVent("feldspar-vent") {{
             attributes.set(Attribute.steam, 1f);
@@ -204,13 +223,13 @@ public class EnvironmentBlocks {
             wall = daciteWall;
         }};
 
-        andesiteRubble = new Floor("andesite-rubble-", 4) {{
+        andesiteRubble = new Floor("andesite-rubble", 4) {{
             wall = daciteWall;
         }};
-        andesite = new Floor("andesite-", 4) {{
+        andesite = new Floor("andesite", 4) {{
             wall = daciteWall;
         }};
-        andesiteVent = new SteamVent("andesite-vent-") {{
+        andesiteVent = new SteamVent("andesite-vent") {{
             attributes.set(Attribute.steam, 1f);
             variants = 2;
             parent = blendGroup = EnvironmentBlocks.andesiteRubble;
@@ -301,6 +320,11 @@ public class EnvironmentBlocks {
             attributes.set(metamorphic, 0.7f);
         }};
         basaltPlates = new AquaTiledFloor("basalt-plates") {{
+            tilingVariants = 2;
+            tilingSize = 4;
+            attributes.set(metamorphic, 0.7f);
+        }};
+        basaltHolePlates = new AquaTiledFloor("basalt-hole-plates") {{
             tilingVariants = 2;
             tilingSize = 4;
             attributes.set(metamorphic, 0.7f);

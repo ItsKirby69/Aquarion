@@ -589,7 +589,8 @@ public class TantrosTechTree {
                             });
                         });
                         node(thermalCrackingUnit, Seq.with(
-                                new Objectives.Produce(oil)
+                                new Objectives.Produce(oil),
+                                new Objectives.SectorComplete(icyRiver)
                         ), () -> {
                             node(ammoniaCompressor, Seq.with(
                                     new Objectives.Produce(methane),

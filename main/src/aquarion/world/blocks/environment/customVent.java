@@ -33,7 +33,7 @@ public class customVent extends SteamVent {
                     state.data += Time.delta;
                 }
                 else {
-                    Damage.tileDamage(Team.derelict, state.tile.x -1, state.tile.y -1, splashDamageRadius/8f, splashDamage/60f);
+                    Damage.tileDamage(Team.derelict, state.tile.x -1, state.tile.y -1, splashDamageRadius/8f, 2*splashDamage/60f);
                     state.data += Time.delta;
                 }
             }
