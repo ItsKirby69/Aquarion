@@ -1858,7 +1858,7 @@ public class CrafterBlocks {
         });
 
         filter = new Filter("filter") {{
-            requirements(Category.crafting, with(copper, 350, silicon, 100, nickel, 150));
+            requirements(Category.crafting, with(copper, 350, silicon, 100, metaglass, 100, nickel, 150));
 
             buildTime = 2200f;
             health = 200;
@@ -1867,7 +1867,7 @@ public class CrafterBlocks {
             itemCapacity = 20;
             liquidCapacity = 300f;
 
-            consumePower(0.5f);
+            consumePower(2.0f);
             consumeLiquid(mindustry.content.Liquids.water, 4.25f); // 0.1 it`s 6 water
             outputLiquidAmount = 255f;
 
@@ -1879,11 +1879,9 @@ public class CrafterBlocks {
                     new ItemStack(AquaItems.powdernickel, 12)
             };
             drawer = new DrawMulti(
-                    new DrawBetterRegion("-shadow") {{ layer = shadow; drawIcon = false; }},
+                    new DrawRegion("-bottom"),
 
-                    new DrawRegion("-underwater") {{
-                        layer = Layer.blockUnder;
-                    }},
+                    new DrawRegion("-underwater"),
 
                     new DrawLiquidTile(mindustry.content.Liquids.water, 2f) {{
                         padBottom = 28f;

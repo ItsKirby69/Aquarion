@@ -55,7 +55,7 @@ public class Filter extends Separator {
     public class FilterBuild extends SeparatorBuild {
         @Override
         public void updateTile() {
-            if (efficiency > 0) {
+            if (efficiency > 0 && liquids.get(AquaLiquids.clearwater) < liquidCapacity) {
                 totalProgress += warmup * delta();
                 progress += getProgressIncrease(craftTime);
                 warmup = Mathf.lerpDelta(warmup, 1f, 0.02f);
@@ -110,6 +110,9 @@ public class Filter extends Separator {
 
         @Override
         public BlockStatus status() {
+            if (liquids.get(AquaLiquids.clearwater) >= liquidCapacity) {
+                return BlockStatus.noOutput;
+            }
             if (efficiency > 0 && warmup > 0.5f) {
                 return BlockStatus.active;
             }
