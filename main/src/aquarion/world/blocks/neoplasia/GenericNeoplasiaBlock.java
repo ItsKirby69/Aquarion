@@ -9,13 +9,14 @@ import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.geom.Geometry;
 import arc.math.geom.Point2;
+import arc.struct.ObjectIntMap;
 import arc.struct.ObjectMap;
 import arc.struct.ObjectSet;
+import arc.struct.Queue;
 import arc.struct.Seq;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.Vars;
-import mindustry.content.Items;
+import mindustry.content.Blocks;
 import mindustry.entities.Units;
 import mindustry.gen.Building;
 import mindustry.gen.Teamc;
@@ -27,11 +28,16 @@ import mindustry.world.blocks.ConstructBlock;
 import mindustry.world.blocks.environment.Prop;
 
 import static aquarion.world.blocks.neoplasia.NeoplasiaGraph.*;
+import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 import static mindustry.Vars.*;
 import static mindustry.content.Blocks.*;
 
 public class GenericNeoplasiaBlock extends Block {
     public static Seq<NeoplasiaBuild> activeNeoplasia = new Seq<>();
+    public static ObjectMap<Item, GenericNeoplasiaBlock> itemProducers = new ObjectMap<>();
+    public static GenericNeoplasiaBlock veinBlock;
+    public static GenericNeoplasiaBlock treeBlock;
 
     public float wscl = 25f, wmag = 0.4f, wtscl = 1f, wmag2 = 1f;
     public float maxAmount = 1000f;
@@ -55,13 +61,13 @@ public class GenericNeoplasiaBlock extends Block {
     public float burstDelay = 150f;
     public int burstLength = 5;
     public float burstTransfer = 35f;
-    //Total time before item requests fail and another producer is requested
-    float requestTimeout = 600f;
     public float recentDamageDecay = 0.004f;
 
     public GenericNeoplasiaBlock oreUpgrade;
     public GenericNeoplasiaBlock damageUpgrade;
     public GenericNeoplasiaBlock empty2Upgrade;
+    public boolean shouldEmpty2Upgrade = false;
+    public float empty2UpgradeCost = 800;
 
     public Color colFrom = Color.valueOf("701e1e");
     public Color colTo = Color.valueOf("cf5a3b");
@@ -69,6 +75,8 @@ public class GenericNeoplasiaBlock extends Block {
     public float oreUpgradeCost = 300;
 
     public float damageUpgradeCost = 10;
+
+    public boolean perItemCapacity = false;
 
     public GenericNeoplasiaBlock(String name) {
         super(name);
@@ -81,18 +89,19 @@ public class GenericNeoplasiaBlock extends Block {
         itemCapacity = 2;
     }
 
+    public ItemStack getOutput() {
+        return output;
+    }
+
     public boolean isProducing(Item item) {
-        return output.item == item;
+        ItemStack o = getOutput();
+        return o != null && o.item == item;
     }
 
     public class NeoplasiaBuild extends Building {
         //TODO This is a LOT of variables for a single block, especially when there will be thousands of these.
         Item current;
-        boolean requesting = false;
-        public float progress = 0f;
         Tile burstTile;
-        float requestTimer = 0f;
-        float producerRequestCooldown = 0f;
         int burstStep = 0;
         float burstTimer = 0f;
         float burstCooldown = 0f;
@@ -103,61 +112,32 @@ public class GenericNeoplasiaBlock extends Block {
         float spawnTime = 0f;
         float spawnDuration = 90f;
         float burstStepDelay = 4f;
-        Seq<ItemStack> requestedQueue = new Seq<>();
         float clogTimer = 0f;
         float clogThreshold = 120f;
+        float disconnectionTime = 0f;
+        ObjectSet<Item> neededItems = new ObjectSet<>();
+        ObjectIntMap<Item> neededAmounts = new ObjectIntMap<>();
+        float requestTimer = 0f;
+        float itemTraffic = 0f;
 
 
-        void requestItem(Item item, int amt){
-            if(item == null || amt <= 0) return;
-
-            ItemStack existing = requestedQueue.find(s -> s.item == item);
-
-            if(existing == null){
-                requestedQueue.add(new ItemStack(item, amt));
-            } else {
-                existing.amount += amt;
-            }
-
-            requesting = true;
-            requestTimer = 0f;
-
-            Seq<NeoplasiaBuild> reqs = NeoplasiaGraph.itemRequesters.get(item);
-            if(reqs == null){
-                reqs = new Seq<>();
-                NeoplasiaGraph.itemRequesters.put(item, reqs);
-            }
-
-            reqs.addUnique(this);
+        public boolean hasItemRoom(Item item) {
+            if (block().perItemCapacity) return items.get(item) < block().itemCapacity;
+            return items.total() < block().itemCapacity;
         }
 
-        //Need to register blocks with an item
-        /*TODO registry should be saved as items would be "ghost" items if the map loads as
-        none of the sequences are saved.*/
         @Override
         public void handleItem(Building source, Item item){
-            super.handleItem(source, item);
-
-            NeoplasiaGraph.registerHolder(item, this);
-
-            ItemStack stack = requestedQueue.find(s -> s.item == item);
-            if(stack != null){
-                stack.amount --;
-                if(stack.amount <= 0){
-                    requestedQueue.remove(stack);
-                }
+            if (hasItemRoom(item)) {
+                items.add(item, 1);
             }
-
-            if(requestedQueue.isEmpty()){
-                requesting = false;
-
-                Seq<NeoplasiaBuild> reqs = NeoplasiaGraph.itemRequesters.get(item);
-                if(reqs != null){
-                    reqs.remove(this);
-                }
-            }
+            itemTraffic = Math.min(100f, itemTraffic + 1f);
         }
         void expelItems() {
+            if (base == null) {
+                items.clear();
+                return;
+            }
             items.each((stack, amt) -> {
                 Tile t = pickBestNeighbor(tile);
                 if (t != null && t.block() == air) {
@@ -171,44 +151,14 @@ public class GenericNeoplasiaBlock extends Block {
             items.clear();
         }
         public boolean isProducing(Item item){
-            return output.item == item;
+            return block().isProducing(item);
         }
 
-        /*
-        God awful.
-        Basically try and move items every tick closer to the target, with large blobs
-        this could cause a lot of lag. So I iterate over every requesting block within
-        NeoplasiaGraph and try and "score" tiles closer to the requestee.
-        This does not have pathfinding and WILL get stuck. hence why itemcapacity is above 1.
-         */
-        void moveItems() {
-            if (items.total() == 0) return;
-            items.each((item, amt) -> {
-                Seq<NeoplasiaBuild> reqs = NeoplasiaGraph.itemRequesters.get(item);
-                if (reqs == null || reqs.isEmpty()) return;
-                NeoplasiaBuild target = null;
-                float bestDst = Float.MAX_VALUE;
-                for (NeoplasiaBuild r : reqs) {
-                    if (r.tile == null) continue;
-                    float dst = dst2(r);
-                    if (dst < bestDst) {
-                        bestDst = dst;
-                        target = r;
-                    }
-                }
-                if (target == null) return;
-                Building next = NeoplasiaGraph.stepToward(this, target);
-                if (next == null) return;
-                if (next.items.total() >= next.block.itemCapacity) return;
-                items.remove(item, 1);
-                next.handleItem(this, item);
-                return;
-            });
-        }
+
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            return items.total() < itemCapacity;
+            return hasItemRoom(item);
         }
 
         boolean hasItemCost(ItemStack[] cost) {
@@ -232,9 +182,6 @@ public class GenericNeoplasiaBlock extends Block {
         public void created() {
             super.created();
             amount = startMass;
-            if (output != null) {
-                NeoplasiaGraph.registerActiveProducer(output.item, this);
-            }
             NeoplasiaGraph.register(this);
         }
 
@@ -250,31 +197,35 @@ public class GenericNeoplasiaBlock extends Block {
         @Override
         public void updateTile() {
             if (tile == null) return;
-            producerRequestCooldown -= delta();
             health = amount;
             maxHealth = amount;
             recentDamage = Math.max(0f, recentDamage - recentDamageDecay);
-            requestTimer += delta();
-            if (requestTimer > requestTimeout) {
-                requesting = false;
-            }
             if (spawnTime < spawnDuration) spawnTime += delta();
             if (amount <= 0f) {
                 kill();
                 return;
             }
 
-            grow();
+            boolean connected = NeoplasiaGraph.isConnected(this);
+            if (!connected) {
+                disconnectionTime += delta();
+                amount -= amount * (0.001f + disconnectionTime * 0.00005f) * delta();
+            } else {
+                disconnectionTime = 0f;
+                grow();
+            }
+            itemTraffic = Math.max(0, itemTraffic - 0.1f * delta());
+            if (itemTraffic > 20f && connected && veinBlock != null && block().getClass() == GenericNeoplasiaBlock.class) {
+                upgradeTo(veinBlock);
+                return;
+            }
             for (int i = 0; i < bursts; i++) burstSpread();
             damageNearby();
             tryUpgrades();
-            progress += delta() / 2;
-
-            if (progress >= 1) {
-                progress = 0f;
-                moveItems();
-            }
-            if (items.total() > 0) {
+            requestItems();
+            pushItems();
+            trySpawnTree(connected);
+            if (items.total() > 0 && neededItems.isEmpty()) {
                 clogTimer += delta();
                 if (clogTimer >= clogThreshold) {
                     expelItems();
@@ -283,83 +234,97 @@ public class GenericNeoplasiaBlock extends Block {
             } else {
                 clogTimer = 0f;
             }
+            neededItems.clear();
+            neededAmounts.clear();
         }
 
-        void request(Item item, int amt){
-            ItemStack existing = requestedQueue.find(s -> s.item == item);
-
-            if(existing == null){
-                requestedQueue.add(new ItemStack(item, amt));
-            }else{
-                existing.amount += amt;
-            }
-
-            requesting = true;
-
-            Seq<NeoplasiaBuild> reqs = NeoplasiaGraph.itemRequesters.get(item);
-            if(reqs == null){
-                reqs = new Seq<>();
-                NeoplasiaGraph.itemRequesters.put(item, reqs);
-            }
-
-            reqs.addUnique(this);
-
-            if(producerRequestCooldown <= 0f){
-                producerRequestCooldown = 60f;
-                NeoplasiaGraph.trySpawnProducer(this, item);
-            }
-        }
-
-
-        @Override
-        public void onRemoved() {
-            super.onRemoved();
-
-            if (output != null) {
-                Seq<NeoplasiaBuild> list = NeoplasiaGraph.activeProducers.get(output.item);
-                if (list != null) {
-                    list.remove(this);
-                    if (list.isEmpty()) {
-                        NeoplasiaGraph.activeProducers.remove(output.item);
-                    }
-                }
-            }
-        }
-        public GenericNeoplasiaBlock block(){
-            return (GenericNeoplasiaBlock) this.block;
-        }
-        void tryUpgrades() {
-
-            if(oreUpgrade != null && isOre(tile)){
-                if(oreUpgrade.itemCost != null){
-                    for(ItemStack stack : oreUpgrade.itemCost){
-                        int have = items.get(stack.item);
-                        if(have < stack.amount){
-                            int missing = stack.amount - have;
-                            requestItem(stack.item, missing);
-                            ensureProduction(stack.item, new ObjectSet<>(), this);
+        void trySpawnTree(boolean connected) {
+            if (treeBlock == null || !connected || amount < maxAmount * 0.6f) return;
+            if (Mathf.chance(0.001f * delta())) {
+                for (int dx = -3; dx <= 3; dx++) {
+                    for (int dy = -3; dy <= 3; dy++) {
+                        Tile other = world.tile(tile.x + dx, tile.y + dy);
+                        if (other != null && other.block() == Blocks.air && treeBlock.canPlaceOn(other, team, 0)) {
+                            float cost = maxAmount * 0.25f;
+                            if (amount >= cost) {
+                                amount -= cost;
+                                other.setBlock(treeBlock, team);
+                            }
                             return;
                         }
                     }
                 }
-                if(amount >= oreUpgrade.cost && hasItemCost(oreUpgrade.itemCost)){
-                    consumeItemCost(oreUpgrade.itemCost);
-                    tile.setBlock(oreUpgrade, team);
-                }
+            }
+        }
 
+        @Override
+        public void onRemoved() {
+            super.onRemoved();
+            NeoplasiaGraph.buildPulseIds.remove(this, 0);
+        }
+        public GenericNeoplasiaBlock block(){
+            return (GenericNeoplasiaBlock) this.block;
+        }
+        void upgradeTo(GenericNeoplasiaBlock target) {
+            float savedAmount = amount;
+            for (Item item : content.items()) {
+                while (items.get(item) > 0) {
+                    items.remove(item, 1);
+                    boolean didPush = false;
+                    for (Building neighbor : proximity) {
+                        if (!(neighbor instanceof NeoplasiaBuild)) continue;
+                        if (neighbor.items.total() >= neighbor.block.itemCapacity) continue;
+                        if (!neighbor.acceptItem(this, item)) continue;
+                        neighbor.handleItem(this, item);
+                        didPush = true;
+                        break;
+                    }
+                    if (!didPush) {
+                        items.add(item, 1);
+                        break;
+                    }
+                }
+            }
+            items.clear();
+            tile.setBlock(Blocks.air, team);
+            tile.setBlock(target, team);
+            if (tile.build instanceof NeoplasiaBuild nb) {
+                nb.amount = Math.min(nb.block().maxAmount, savedAmount);
+            }
+        }
+
+        void tryUpgrades() {
+            if(oreUpgrade != null && isOre(tile)){
+                if(oreUpgrade.itemCost != null){
+                    for (ItemStack stack : oreUpgrade.itemCost) {
+                        neededItems.add(stack.item);
+                        neededAmounts.put(stack.item, stack.amount);
+                    }
+                    if(!hasItemCost(oreUpgrade.itemCost)){
+                        return;
+                    }
+                }
+                if(amount >= oreUpgrade.cost){
+                    consumeItemCost(oreUpgrade.itemCost);
+                    upgradeTo(oreUpgrade);
+                }
                 return;
             }
 
             if(amount >= emptyUpgradeCost && !isOre(tile) && shouldEmptyUpgrade){
                 if(emptyUpgrade != null){
-                    tile.setBlock(emptyUpgrade, team);
+                    upgradeTo(emptyUpgrade);
                 }
+            }
+
+            if(empty2Upgrade != null && amount >= empty2UpgradeCost && !isOre(tile) && shouldEmpty2Upgrade){
+                upgradeTo(empty2Upgrade);
             }
 
             float chance = recentDamage * upgradeDamageScale;
             if(amount >= damageUpgradeCost && Mathf.chanceDelta(chance)){
                 if(damageUpgrade != null){
-                    tile.setBlock(damageUpgrade, team);
+                    upgradeTo(damageUpgrade);
                 }
             }
         }
@@ -474,6 +439,116 @@ public class GenericNeoplasiaBlock extends Block {
             });
         }
 
+        void pullItems(Item item, int desired) {
+            int need = desired - items.get(item);
+            if (need <= 0) return;
+            for (Building neighbor : proximity) {
+                if (!(neighbor instanceof NeoplasiaBuild nb)) continue;
+                int have = nb.items.get(item);
+                if (have <= 0) continue;
+                int take = Math.min(need, have);
+                nb.items.remove(item, take);
+                items.add(item, take);
+                need -= take;
+                if (need <= 0) return;
+            }
+        }
+
+        void pushItems() {
+            if (items.total() <= 0) return;
+            int pushed = 0;
+            for (int i = 0; i < pushRate; i++) {
+                Item item = null;
+                for (Item candidate : content.items()) {
+                    int count = items.get(candidate);
+                    if (count <= 0) continue;
+                    int keep = neededAmounts.get(candidate, 0);
+                    if (count > keep) {
+                        item = candidate;
+                        break;
+                    }
+                }
+                if (item == null) break;
+                items.remove(item, 1);
+                boolean didPush = false;
+                for (Building neighbor : proximity) {
+                    if (!(neighbor instanceof NeoplasiaBuild n)) continue;
+                    if (!n.acceptItem(this, item)) continue;
+                    n.handleItem(this, item);
+                    didPush = true;
+                    pushed++;
+                    break;
+                }
+                if (!didPush) {
+                    items.add(item, 1);
+                    break;
+                }
+            }
+            if (pushed > 0) clogTimer = 0f;
+        }
+
+        // non-vein blobs push more per tick */
+        final int pushRate = 8;
+
+        NeoplasiaBuild findProducer(Item item, int maxSteps) {
+            Queue<NeoplasiaBuild> queue = new Queue<>();
+            ObjectSet<NeoplasiaBuild> visited = new ObjectSet<>();
+            queue.addLast(this);
+            visited.add(this);
+            int steps = 0;
+            while (queue.size > 0 && steps < maxSteps) {
+                NeoplasiaBuild cur = queue.removeFirst();
+                steps++;
+                for (Building neighbor : cur.proximity) {
+                    if (!(neighbor instanceof NeoplasiaBuild nb)) continue;
+                    if (visited.contains(nb)) continue;
+                    visited.add(nb);
+                    if (nb.isProducing(item)) return nb;
+                    queue.addLast(nb);
+                }
+            }
+            return null;
+        }
+
+        Tile findEmptyTile(int maxSteps) {
+            Queue<NeoplasiaBuild> queue = new Queue<>();
+            ObjectSet<NeoplasiaBuild> visited = new ObjectSet<>();
+            queue.addLast(this);
+            visited.add(this);
+            int steps = 0;
+            while (queue.size > 0 && steps < maxSteps) {
+                NeoplasiaBuild cur = queue.removeFirst();
+                steps++;
+                for (int i = 0; i < 4; i++) {
+                    Tile t = cur.tile.nearby(i);
+                    if (t != null && t.block() == air) return t;
+                }
+                for (Building neighbor : cur.proximity) {
+                    if (neighbor instanceof NeoplasiaBuild nb && !visited.contains(nb)) {
+                        visited.add(nb);
+                        queue.addLast(nb);
+                    }
+                }
+            }
+            return null;
+        }
+
+        void requestItems() {
+            if (neededItems.isEmpty()) return;
+            requestTimer += delta();
+            if (requestTimer < 120f) return;
+            requestTimer = 0;
+            for (Item item : neededItems) {
+                GenericNeoplasiaBlock factory = itemProducers.get(item);
+                if (factory == null) continue;
+                if (findProducer(item, 15) != null) continue;
+                Tile spawnTile = findEmptyTile(10);
+                if (spawnTile != null) {
+                    spawnTile.setBlock(factory, team);
+                }
+            }
+        }
+
         @Override
         public void draw() {
             float scale = 1f;
@@ -500,6 +575,8 @@ public class GenericNeoplasiaBlock extends Block {
             super.write(write);
             write.f(amount);
             write.f(spawnTime);
+            write.f(disconnectionTime);
+            write.f(itemTraffic);
         }
 
         @Override
@@ -507,6 +584,8 @@ public class GenericNeoplasiaBlock extends Block {
             super.read(read, revision);
             amount = read.f();
             spawnTime = read.f();
+            disconnectionTime = read.f();
+            itemTraffic = read.f();
             current = items.first();
         }
     }
