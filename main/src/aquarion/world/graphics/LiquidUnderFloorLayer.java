@@ -1,7 +1,6 @@
 package aquarion.world.graphics;
 
-import aquarion.world.graphics.shaders.ColorStripShader;
-import aquarion.world.graphics.shaders.MaskBaseTextureShader;
+import aquarion.world.graphics.shaders.MaskColorShader;
 import aquarion.world.graphics.shaders.ScalingShader;
 import aquarion.world.graphics.shaders.util.CaptureBuffer;
 import aquarion.world.graphics.shaders.util.ShaderWrapper;
@@ -15,11 +14,8 @@ import static mindustry.Vars.renderer;
 
 public class LiquidUnderFloorLayer extends CacheLayer.ShaderLayer {
 
-    /**shader for stripping marker colors*/
-    public Shader stripShader;
-
     /**shader for masking the base texture*/
-    public MaskBaseTextureShader maskTex;
+    public MaskColorShader maskTex;
 
     /**shader for scaling the base texture to a tile in size*/
     public Shader scalingShader;
@@ -44,8 +40,7 @@ public class LiquidUnderFloorLayer extends CacheLayer.ShaderLayer {
                 scalingBuffer.getTexture().bind(0);
             }
         };
-        stripShader = new ColorStripShader(targetColor);
-        maskTex = new MaskBaseTextureShader(baseTexName);
+        maskTex = new MaskColorShader(targetColor);
         scalingShader = new ScalingShader();
         fetcher = new TextureFetcher(baseTexName);
     }
@@ -74,8 +69,7 @@ public class LiquidUnderFloorLayer extends CacheLayer.ShaderLayer {
         maskTex.maskTex = renderer.effectBuffer.getTexture();
         applyLiquidBuffer.blit(maskTex);
 
-        //finally draw the floors
-        renderer.effectBuffer.blit(stripShader);
+
         renderer.blocks.floor.beginDraw();
     }
 }

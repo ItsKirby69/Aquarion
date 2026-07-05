@@ -1,26 +1,27 @@
 package aquarion.world.graphics.shaders;
 
-import arc.Core;
+import arc.graphics.Color;
 import arc.graphics.Texture;
 import mindustry.graphics.Shaders;
 
-public class MaskBaseTextureShader extends Shaders.LoadShader {
+public class MaskColorShader extends Shaders.LoadShader {
 
-    String textureName = "white";
+    Color targetColor;
 
     public Texture maskTex;
 
-    public MaskBaseTextureShader(){
-        this("");
+    public MaskColorShader(){
+        this(Color.black);
     }
 
-    public MaskBaseTextureShader(String textureName) {
+    public MaskColorShader(Color targetColor) {
         super("maskBaseTexture", "screenspace");
-        this.textureName = textureName;
+        this.targetColor = targetColor;
     }
 
     @Override
     public void apply() {
+        setUniformf("u_target_color", targetColor.r, targetColor.g, targetColor.b, targetColor.a);
 
         maskTex.bind(1);
         setUniformi("u_texture_mask", 1);
