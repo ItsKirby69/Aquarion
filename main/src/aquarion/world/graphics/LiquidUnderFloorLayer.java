@@ -1,14 +1,15 @@
 package aquarion.world.graphics;
 
-import aquarion.world.graphics.shaders.ColorFillShader;
 import aquarion.world.graphics.shaders.ColorStripShader;
 import aquarion.world.graphics.shaders.MaskBaseTextureShader;
+import aquarion.world.graphics.shaders.ScalingShader;
 import aquarion.world.graphics.shaders.util.CaptureBuffer;
 import aquarion.world.graphics.shaders.util.ShaderWrapper;
+import aquarion.world.graphics.shaders.util.TextureFetcher;
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.graphics.gl.Shader;
 import mindustry.graphics.CacheLayer;
-import mindustry.graphics.Shaders;
 
 import static mindustry.Vars.renderer;
 
@@ -18,11 +19,17 @@ public class LiquidUnderFloorLayer extends CacheLayer.ShaderLayer {
     public Shader stripShader;
 
     /**shader for masking the base texture*/
-    public Shader baseShader;
+    public MaskBaseTextureShader maskTex;
+
+    /**shader for scaling the base texture to a tile in size*/
+    public Shader scalingShader;
 
     /***/
+    public TextureFetcher fetcher;
 
-    public CaptureBuffer intermediateBuffer = new CaptureBuffer();
+    public CaptureBuffer scalingBuffer = new CaptureBuffer();
+
+    public CaptureBuffer applyLiquidBuffer = new CaptureBuffer();
 
     public LiquidUnderFloorLayer(Shader shader, Color baseColor) {
         this(shader, baseColor, "white");
@@ -34,11 +41,13 @@ public class LiquidUnderFloorLayer extends CacheLayer.ShaderLayer {
             @Override
             public void apply() {
                 super.apply();
-                intermediateBuffer.getTexture().bind(0);
+                scalingBuffer.getTexture().bind(0);
             }
         };
         stripShader = new ColorStripShader(targetColor);
-        baseShader = new MaskBaseTextureShader(baseTexName);
+        maskTex = new MaskBaseTextureShader(baseTexName);
+        scalingShader = new ScalingShader();
+        fetcher = new TextureFetcher(baseTexName);
     }
 
     @Override
@@ -49,15 +58,21 @@ public class LiquidUnderFloorLayer extends CacheLayer.ShaderLayer {
         renderer.effectBuffer.end();
         renderer.blocks.floor.beginDraw();
 
-        //preprocess floors to create base area for the liquid texture
-        intermediateBuffer.capture();
-        renderer.effectBuffer.blit(baseShader);
-        intermediateBuffer.stopCapture();
+        //scale base floor texture to the block grid
+        scalingBuffer.capture();
+        Draw.blit(fetcher.fetched, scalingShader);
+        scalingBuffer.stopCapture();
+
+        //apply liquid distortion to base
+        applyLiquidBuffer.capture();
+        scalingBuffer.blit(shader);
+        applyLiquidBuffer.stopCapture();
 
         renderer.blocks.floor.beginDraw();
 
-        //draw liquid to the screen
-        intermediateBuffer.blit(shader);
+        //use the drawn layer texture as a mask for the liquid texture
+        maskTex.maskTex = renderer.effectBuffer.getTexture();
+        applyLiquidBuffer.blit(maskTex);
 
         //finally draw the floors
         renderer.effectBuffer.blit(stripShader);
