@@ -41,7 +41,7 @@ public class GerbInfantryAI extends AIController {
     float flankAngle = 0f;
 
     float soundTimer = 0f;
-    static final float soundCooldown = 120f; // ~2 seconds at 60fps
+    static final float soundCooldown = 120f;
     private static final boolean[] pathNotFound = {false};
 
     @Override
@@ -67,10 +67,9 @@ public class GerbInfantryAI extends AIController {
             lastTactic = tactic;
         }
 
-        // Speaking
+        //Speaking
         maybeGroupChatter();
 
-        // --Tactics
         //TODO Possibly more variety/variance on existing ones...
         switch (tactic) {
             case ADVANCE -> doAdvance(core);
@@ -264,7 +263,7 @@ public class GerbInfantryAI extends AIController {
 
     void engage(Building b) {
         if (b == null || !b.isValid()) return;
-        for (var mount : unit.mounts) {
+        for (           mindustry.entities.units.WeaponMount mount : unit.mounts) {
             if (mount.weapon.controllable && mount.weapon.bullet != null && mount.weapon.bullet.collidesGround) {
                 if(unit.type.faceTarget) unit.lookAt(b);
                 mount.target = b;

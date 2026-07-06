@@ -7,6 +7,7 @@ import aquarion.ui.IconLoader;
 import aquarion.ui.ModSettings;
 import aquarion.world.MultiBlockLib.LinkBlock;
 import aquarion.world.MultiBlockLib.PlaceholderBlock;
+import aquarion.world.blocks.neoplasia.NeoplasiaGraph;
 import aquarion.world.graphics.AquaShaders;
 import aquarion.world.graphics.Renderer;
 import arc.*;
@@ -92,6 +93,7 @@ public class AquaLoader extends Mod {
     public AquaLoader(boolean tools){
         AquaLoader.tools = tools;
         Events.run(EventType.Trigger.draw, Renderer::draw);
+        //Events.run(EventType.Trigger.update, NeoplasiaGraph::update);
         ModEventHandler.init();
 
         Events.on(EventType.FileTreeInitEvent.class, e ->

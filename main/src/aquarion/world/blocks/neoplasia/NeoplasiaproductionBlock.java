@@ -25,6 +25,7 @@ import mindustry.world.Tile;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
+import static mindustry.content.Blocks.*;
 
 public class NeoplasiaproductionBlock extends GenericNeoplasiaBlock{
     public TextureRegion lobeBotRegion;
@@ -33,7 +34,12 @@ public class NeoplasiaproductionBlock extends GenericNeoplasiaBlock{
     public float craftCost = 10;
     public float craftTime = 60;
     public ItemStack output;
-    public ItemStack input;//Only have 1 for now
+    public ItemStack input;
+
+    @Override
+    public ItemStack getOutput() {
+        return output;
+    }
 
     @Override
     public void load(){
@@ -54,18 +60,19 @@ public class NeoplasiaproductionBlock extends GenericNeoplasiaBlock{
         public void updateTile(){
             if(shouldCraft && amount > craftCost){
                 prog += 1/craftTime*delta();
-                if(input!= null) {
-                    if (prog >= 1 && items.has(input.item.id) && output.amount + items.total() < itemCapacity) {
+                if(input != null) {
+                    if (prog >= 1 && items.has(input.item.id) && (block().perItemCapacity ? items.get(output.item) + output.amount <= itemCapacity : output.amount + items.total() < itemCapacity)) {
                         items.remove(input);
                         items.add(output.item, output.amount);
                         prog = 0;
                         amount -= craftCost;
-                    } else if(items.get(input.item) <= input.amount){
-                        //TODO multiple item support.
-                        requestItem(input.item, items.get(input.item)-input.amount);
+                    } else if(items.get(input.item) < input.amount){
+                        neededItems.add(input.item);
+                        neededAmounts.put(input.item, input.amount);
+                        pullItems(input.item, input.amount);
                     }
                 } else{
-                    if (prog >= 1 &&  output.amount + items.total() < itemCapacity) {
+                    if (prog >= 1 && (block().perItemCapacity ? items.get(output.item) + output.amount <= itemCapacity : output.amount + items.total() < itemCapacity)) {
                         items.add(output.item, output.amount);
                         prog = 0;
                         amount -= craftCost;

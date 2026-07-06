@@ -15,7 +15,10 @@ import aquarion.world.blocks.logic.StorageReader;
 import aquarion.world.blocks.logic.toggler;
 import aquarion.world.blocks.neoplasia.DefensiveNeoplasiaBlock;
 import aquarion.world.blocks.neoplasia.GenericNeoplasiaBlock;
+import aquarion.world.blocks.neoplasia.NeoplasmHeart;
 import aquarion.world.blocks.neoplasia.NeoplasiaGraph;
+import aquarion.world.blocks.neoplasia.NeoplasmTreeBase;
+import aquarion.world.blocks.neoplasia.NeoplasmVein;
 import aquarion.world.blocks.neoplasia.NeoplasiaproductionBlock;
 import aquarion.world.content.AquaItem;
 import aquarion.world.graphics.AquaFx;
@@ -45,7 +48,7 @@ import static mindustry.type.ItemStack.with;
 
 public class CoreBlocks {
     public static Block bomb, toggler, splitter, channel, storageReader, merger, buzzSaw, reception, infomatic, mendPyre, mendSubstation, mendPylon, cache, coreCuesta, overClockProjector,
-            coreEscarpment, petal, reconstruct,  corePike, buildCairn, constructionTower, crate, deflectorWell, neoplasiaMass, OreSlurper, oreSlurperer, oresplurpererer, callus, thicBlob, enzyme;
+            coreEscarpment, petal, reconstruct,  corePike, buildCairn, constructionTower, crate, deflectorWell, neoplasiaMass, OreSlurper, oreSlurperer, oresplurpererer, callus, thicBlob, enzyme, heart, vein, tree;
 
     public static <T extends UnlockableContent> void overwrite(UnlockableContent target, Cons<T> setter) {
         setter.get((T) target);
@@ -255,23 +258,29 @@ public class CoreBlocks {
         neoplasiaMass = new GenericNeoplasiaBlock("neoplasia-mass") {{
             requirements(Category.effect, with(silicon, 1));
             base = this;
-            itemCapacity = 5;
+            itemCapacity = 8;
+            perItemCapacity = true;
+            burstThresholdFraction = 0.55f;
             emptyUpgrade = (GenericNeoplasiaBlock) thicBlob;
             emptyUpgradeCost = 800;
             oreUpgrade = (GenericNeoplasiaBlock) (OreSlurper = new NeoplasiaproductionBlock("ore-slurper") {{
                 requirements(Category.effect, with(silicon, 1));
-                maxAmount = 1500;
-                itemCapacity = 20;
+                maxAmount = 1600;
+                itemCapacity = 50;
+                perItemCapacity = true;
+                burstThresholdFraction = 0.95f;
                 cost = 500;
                 itemCost = ItemStack.with(crystal, 1);
                 oreUpgrade = (GenericNeoplasiaBlock) (oreSlurperer = new NeoplasiaproductionBlock("ore-slurperer") {{
-                    maxAmount = 2000;
+                    maxAmount = 2700;
                     requirements(Category.effect, with(silicon, 1));
                     burstDelay = 100;
                     burstLength = 15;
                     selfGrowRate = 1.5f;
-                    itemCapacity = 15;
-                    itemCost = ItemStack.with(crystal, 10, pearl, 5);
+                    itemCapacity = 60;
+                    perItemCapacity = true;
+                    burstThresholdFraction = 0.95f;
+                    itemCost = ItemStack.with(crystal, 20, pearl, 10);
                     bursts = 3;
                     cost = 1500;
                     baseSize = 20;
@@ -281,7 +290,8 @@ public class CoreBlocks {
                         cost = 2500;
                         requirements(Category.effect, with(silicon, 1));
                         burstLength = 15;
-                        itemCapacity = 30;
+                        itemCapacity = 70;
+                        perItemCapacity = true;
                         selfGrowRate = 2.6f;
                         itemCost = ItemStack.with(crystal, 20, pearl, 10);
                         bursts = 5;
@@ -298,21 +308,18 @@ public class CoreBlocks {
                 baseSize = 16;
             }});
             shouldEmptyUpgrade = true;
-            emptyUpgrade = (GenericNeoplasiaBlock) (thicBlob = new GenericNeoplasiaBlock("thic-neoplasia-blob") {{
-                base = (GenericNeoplasiaBlock) neoplasiaMass;
-                baseSize = 16;
-                maxAmount = 2500;
-                burstLength = 15;
-                itemCapacity = 10;
-                oreGrowBonus = 0.12f;
-                selfGrowRate = 0.12f;
-                burstDelay = 25;
-                shouldEmptyUpgrade = false;
-                oreUpgrade = (GenericNeoplasiaBlock) OreSlurper;
-                damageUpgrade = (GenericNeoplasiaBlock) callus;
-                colFrom = Color.valueOf("cf683b");
-                colTo = Color.valueOf("e2c451");
-            }});
+            emptyUpgrade = null;
+//            emptyUpgrade = (GenericNeoplasiaBlock) (thicBlob = new GenericNeoplasiaBlock("thic-neoplasia-blob") {{
+//                base = (GenericNeoplasiaBlock) neoplasiaMass;
+//                baseSize = 16;
+//                maxAmount = 2500;
+//                itemCapacity = 10;
+//                shouldEmptyUpgrade = false;
+//                oreUpgrade = (GenericNeoplasiaBlock) OreSlurper;
+//                damageUpgrade = (GenericNeoplasiaBlock) callus;
+//                colFrom = Color.valueOf("cf683b");
+//                colTo = Color.valueOf("e2c451");
+//            }});
         }};
         enzyme = new NeoplasiaproductionBlock("enzyme") {{
             requirements(Category.effect, with(silicon, 1));
@@ -331,7 +338,6 @@ public class CoreBlocks {
             cost = 200;
             shouldEmptyUpgrade = false;
             damageUpgrade = (GenericNeoplasiaBlock) callus;
-            NeoplasiaGraph.registerProducer(AquaItems.crystal, this);
         }};
         petal = new NeoplasiaproductionBlock("petal") {{
             requirements(Category.effect, with(silicon, 1));
@@ -345,13 +351,29 @@ public class CoreBlocks {
             output = new ItemStack(pearl, 2);
             craftCost = 300;
             oreGrowBonus = 0.01f;
-            selfGrowRate = 0.01f;
+            selfGrowRate = 0.1f;
+            burstThresholdFraction = 0.4f;
             burstDelay = 50;
             cost = 200;
             craftTime = 240;
             shouldEmptyUpgrade = false;
             damageUpgrade = (GenericNeoplasiaBlock) callus;
-            NeoplasiaGraph.registerProducer(AquaItems.pearl, this);
+        }};
+        vein = new NeoplasmVein("vein") {{
+            requirements(Category.effect, with(silicon, 1));
+            baseSize = 16;
+            maxAmount = 2000;
+            itemCapacity = 40;
+            bursts = 0;
+            selfGrowRate = 0.01f;
+            shouldCraft = false;
+            shouldEmptyUpgrade = false;
+            base = (GenericNeoplasiaBlock) neoplasiaMass;
+        }};
+        heart = new NeoplasmHeart("neoplasm-heart") {{
+            requirements(Category.effect, with(crystal, 9));
+            size = 1;
+            health = 500;
         }};
         //Holy Jank...
         overwrite(OreSlurper, (NeoplasiaproductionBlock r) -> {
@@ -373,7 +395,25 @@ public class CoreBlocks {
         });
         overwrite(neoplasiaMass, (GenericNeoplasiaBlock r) -> {
             r.base = (GenericNeoplasiaBlock) neoplasiaMass;
+            r.shouldEmpty2Upgrade = true;
+            r.empty2Upgrade = (GenericNeoplasiaBlock) vein;
+            r.empty2UpgradeCost = 1000;
         });
+        GenericNeoplasiaBlock.veinBlock = (GenericNeoplasiaBlock) vein;
+        GenericNeoplasiaBlock.itemProducers.put(crystal, (GenericNeoplasiaBlock) enzyme);
+        tree = new NeoplasmTreeBase("branching-sprout") {{
+            requirements(Category.effect, with(silicon, 1));
+            base = (GenericNeoplasiaBlock) neoplasiaMass;
+            maxAmount = 5000;
+            selfGrowRate = 0.5f;
+            itemCapacity = 30;
+            podCost = 100;
+            branchCost = 200;
+            unitGrowTime = 10f;
+            unitItemCost = new ItemStack[]{new ItemStack(crystal, 2)};
+        }};
+        GenericNeoplasiaBlock.treeBlock = (GenericNeoplasiaBlock) tree;
+        GenericNeoplasiaBlock.itemProducers.put(pearl, (GenericNeoplasiaBlock) petal);
         overClockProjector = new OverclockProjector("overclock-projector") {{
             requirements(Category.effect, with(silicon, 150, copper, 900, polymer, 100, metaglass, 200, ferricMatter, 250));
             size = 2;

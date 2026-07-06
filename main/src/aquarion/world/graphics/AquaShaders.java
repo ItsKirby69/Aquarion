@@ -13,7 +13,9 @@ import arc.util.Nullable;
 import arc.util.Reflect;
 import arc.util.Time;
 import mindustry.Vars;
+import mindustry.content.Liquids;
 import mindustry.graphics.CacheLayer;
+import mindustry.graphics.Pal;
 import mindustry.graphics.Shaders;
 import mindustry.type.Planet;
 
@@ -29,7 +31,8 @@ public class AquaShaders {
     public static @Nullable MonsoonShader monsoon;
     public static @Nullable PodShader neoplasiaPodShader;
     public static @Nullable deflectorShader deflectorShield;
-    public static CacheLayer.ShaderLayer lavalLayer, slavaLayer, petroleumLayer, sslagLayer, brineLayer, shadowLayer, heatLayer, podLayer, glitchLayer, deflecterLayer, neoplasiaBaseLayer;
+    public static CacheLayer.ShaderLayer lavalLayer, slavaLayer, petroleumLayer, sslagLayer, brineLayer, shadowLayer, heatLayer, podLayer, glitchLayer, deflecterLayer, neoplasiaBaseLayer, sslagLayer2,
+            wetUnderLayer;
     public static Fi file(String name){
         return Core.files.internal("shaders/" + name);
     }
@@ -57,6 +60,8 @@ public static void init() {
     neoplasiaBaseLayer = new CacheLayer.ShaderLayer(neoplasiaBaseShader);
     brineLayer = new CacheLayer.ShaderLayer(brine);
     sslagLayer = new CacheLayer.ShaderLayer(shallowSlag);
+    sslagLayer2 = new LiquidUnderFloorLayer(Shaders.slag, Color.valueOf("ff8142"), "molten-slag");
+    wetUnderLayer = new LiquidUnderFloorLayer(Shaders.water, Color.valueOf("4d5ca4"), "deep-water");
     slavaLayer = new CacheLayer.ShaderLayer(shallowLava);
     lavalLayer = new CacheLayer.ShaderLayer(lava);
     heatLayer = new CacheLayer.ShaderLayer(heat);
@@ -67,6 +72,8 @@ public static void init() {
     CacheLayer.addLast(brineLayer);
     CacheLayer.addLast(slavaLayer);
     CacheLayer.addLast(sslagLayer);
+    CacheLayer.add(CacheLayer.normal.id,sslagLayer2);
+    CacheLayer.add(CacheLayer.normal.id,wetUnderLayer);
     CacheLayer.addLast(lavalLayer);
     CacheLayer.addLast(neoplasiaBaseLayer);
 
