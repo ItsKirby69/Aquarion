@@ -42,7 +42,7 @@ public class EnvironmentBlocks {
     public static Block varcaudStalk, qusGrass, kolFern, adreSprig, leafLitter, leafLitterDense, iceWater, blueSandFLoor, blueSandWater, brecciaFloor, soil, fertileSoil,
             smoothBrecciaFloor, arsenideFloor, arsenideLayers, chertFloor,
             chertPlates, greenCoralFloor, BlueCoralFloor, redCoralFloor,
-            andesiteLayers, basaltSpikes, pinkSaltBoulder, algal_carpet, brine_liquid, lava, shallowSlag, shallowLava,
+            andesiteLayers, basaltSpikes, pinkSaltBoulder, algal_carpet, brine_liquid, lava, shallowSlag, shallowSlag2, wetRocks, shallowLava,
             coral_floor,cupriteBoulder,cupriteWall,cupriteChunks, cupriteFloor, feldspar_vent, feldspar, ferric_extrusions,
             gabbro_extrusions, gabbro_vent, gabbro, petroleumFloor, petroleumSeep, geothermal_vent, rubble,
              metal13, metal14, metal15, metal16, roughFeldspar, glassFloor, feldsparPebbles, feldsparRubble, smoothFeldspar, phylite_floor, slate, ultrafamicFloor, brimstoneFloor, brimstoneVent,
@@ -90,6 +90,30 @@ public class EnvironmentBlocks {
             status = StatusEffects.burning;
             attributes.set(Attribute.heat, 1.1f);
             cacheLayer = AquaShaders.sslagLayer;
+        }};
+        shallowSlag2 = new Floor("shallow-slag2") {{
+            speedMultiplier = 0.1f;
+            variants = 0;
+            liquidDrop = Liquids.slag;
+            liquidMultiplier = 0.5f;
+            isLiquid = true;
+            status = StatusEffects.burning;
+            attributes.set(Attribute.heat, 1.1f);
+            cacheLayer = AquaShaders.sslagLayer2;
+            drawEdgeIn = true;
+            drawEdgeOut = false;
+        }};
+        wetRocks = new Floor("wet-rocks") {{
+            speedMultiplier = 0.1f;
+            variants = 0;
+            liquidDrop = Liquids.water;
+            liquidMultiplier = 0.5f;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            attributes.set(Attribute.water, 1.1f);
+            cacheLayer = AquaShaders.wetUnderLayer;
+            drawEdgeIn = true;
+            drawEdgeOut = false;
         }};
         ultrafamicFloor = new Floor("ultrafamic-floor", 3) {{
             wall = ultrafamicWall;
