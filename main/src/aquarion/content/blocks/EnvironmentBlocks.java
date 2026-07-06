@@ -5,12 +5,14 @@ import aquarion.content.AquaItems;
 import aquarion.content.AquaLiquids;
 import aquarion.content.AquaStatuses;
 import aquarion.world.blocks.environment.*;
+import aquarion.world.blocks.power.GenericGenerator;
 import aquarion.world.graphics.AquaFx;
 import aquarion.world.graphics.AquaShaders;
 import arc.func.Cons;
 import arc.graphics.Color;
 import mindustry.content.*;
 import mindustry.ctype.UnlockableContent;
+import mindustry.entities.part.RegionPart;
 import mindustry.game.Team;
 import mindustry.gen.Sounds;
 import mindustry.graphics.CacheLayer;
@@ -18,6 +20,7 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.Attribute;
 
@@ -37,7 +40,7 @@ public class EnvironmentBlocks {
     public static Block scrap1,scrap2,scrap3, okelBush, crasindtree, crasindWall, denseStone, stonePores, clay, metalWall1, metalWalltwo, sparseSnow, packedSnow, floorLight, brokenFloorLight, metalPlates1,metalVent, metalBankFloor, damagedPlates1, damagedPlates2, damagedPlates3, damagedPlated4, plates1, metalPlates, plates2,plates3,plates4, metalGrating, azuriteProp, blueSandBoulder, brecciaBoulder, chertBoulder,
             arsenideBoulder, feldsparBoulder, gabbroBoulder,
             ultrafamicBoulder;
-    public static Block parzilSprig,
+    public static Block parzilSprig, crasindSprout, crasindLitter, scrapChunks, scrapWall, scrapFloor, defunctFramingCross, defunctConstruct, defunctFlooring, crasindFloor,
             CrasseCoral,stoneRock,largeStoneRock,hugeStoneRock,massiveStoneRock, basaltRock, largeBasaltRock, hugeBasaltRock, massiveBasaltRock,shaleChunk, largeShaleChunk;
     public static Block varcaudStalk, deadVarcaudStalk, qusGrass, kolFern, adreSprig, leafLitter, leafLitterDense, iceWater, clearWater, blueSandFLoor, blueSandWater, redSandFLoor, brecciaFloor, soil, fertileSoil,
             smoothBrecciaFloor, arsenideFloor, arsenideLayers, chertFloor,
@@ -51,12 +54,12 @@ public class EnvironmentBlocks {
     public static Block oreNickelWall, scorche, oreRadium, oreUranium, orePitchblende, nickelFloor,
             oreNickel, oreBauxite, oreAluminum, oreSilicon, acuminiteOre, ferricOre, serpentineOre, miniumOre, pentlanditeOre;
     public static Block towaniteCluster, azuriteLarge, blueSandWall,redSandWall, brecciaWall, ultrafamicWall, exposedSerpentine,
-             boricWall, arsenideWall, chertWall, metalWall3, metalWall4, metalWall5, metalWall6, metalWall7,
+             boricWall, arsenideWall, chertWall, metalWall3, metalWall4, metalWall5, metalWall6, metalWall7, metalFloor1, metalFloor2, blueMetalFloor1,
             chertOutcrop, feldsparOutcrop, pillarCoral, loteasCoral, songCoral,
              algalBloom, parzilPine, algalWall,
             bloom, blueCoralWall, redCoralWall, greenCoralWall,
             feldsparWall, gabbroWall, andesiteExtrusions, CrystalGalena,
-            elderParzil, ksaRoot, yulrCoral, bewCoral, herylBush, tranticaBush, regoubloom, tyrqPod, bigTyrqPod, basaltBluff, basaltOutcrop, aquaslag;
+            elderParzil, ksaRoot, yulrCoral, bewCoral, herylBush, tranticaBush,largeTranticaBush, tranticaOvergrownWall, tranticaOvergrownFloor, regoubloom, tyrqPod, bigTyrqPod, basaltBluff, basaltOutcrop;
 
     public static void loadContent() {
         //TODO fix the blend group
@@ -522,6 +525,19 @@ public class EnvironmentBlocks {
             autotile = true;
             drawEdgeIn = drawEdgeOut = false;
         }};
+        metalFloor1 = new Floor("metal-floor-1-tiled"){
+            {
+                autotile = true;
+                drawEdgeIn = drawEdgeOut = false;
+            }};
+        metalFloor2 = new Floor("metal-floor-2-tiled"){{
+                autotile = true;
+                drawEdgeIn = drawEdgeOut = false;
+        }};
+        blueMetalFloor1 = new Floor("blue-metal-floor-1-tiled"){{
+            autotile = true;
+            drawEdgeIn = drawEdgeOut = false;
+        }};
         metal13 = new Floor("metal-frame", 0){{
         }};
         metal14 = new Floor("metal-bumpe", 0){{
@@ -563,6 +579,18 @@ public class EnvironmentBlocks {
         }};
         scorche = new OverlayFloor("scorche"){{
             variants = 4;
+        }};
+        defunctFlooring = new Floor("defunct-flooring-1");
+        defunctFramingCross = new Wall("defunct-framing-cross") {{
+            requirements(Category.defense, with(silicon, 50, lead, 75, graphite, 50));
+            variants = 2;
+            health = 150;
+        }};
+        defunctConstruct = new GenericGenerator("defunct-construct") {{
+            size = 3;
+            requirements(Category.crafting, with(silicon, 500, lead, 750, ferricMatter, 50, copper, 750));
+            health = 1500;
+            customShadow = true;
         }};
         sporeMoss.attributes.set(fertility, 0.75f);
         basalt.attributes.set(metamorphic, 0.5f);
@@ -753,6 +781,16 @@ public class EnvironmentBlocks {
             shadowLayer = Layer.blockOver;
             buildTime = 15 * 60f;
         }};
+        crasindSprout = new WobbleProp("crasind-sprout"){{
+            variants = 3;
+            destroySound = Sounds.plantBreak;
+        }};
+        crasindLitter = new OverlayFloor("crasind-litter") {{
+            variants = 3;
+        }};
+        crasindFloor = new Floor("crasind-floor") {{
+            variants = 4;
+        }};
         tyrqPod = new FloraBlock("tyrq-pod") {{
             shadowAlpha = 0.7f;
             buildVisibility = sandboxOnly;
@@ -803,7 +841,26 @@ public class EnvironmentBlocks {
             shadowLayer = Layer.power - 4;
             shadowOffset = -8;
         }};
-
+        largeTranticaBush = new FloraBlock("large-trantica-bush") {{
+            shadowAlpha = 0.7f;
+            buildVisibility = sandboxOnly;
+            buildTime = 30*60f;
+            rotationRand = 50;
+            size = 3;
+            breakable = false;
+            health = 7500;
+            emitLight = true;
+            lightColor = Color.valueOf("d39372");
+            lightRadius = 15*8f;
+            clipSize = 120;
+            underBullets = true;
+            targetable = false;
+            destroyEffect = AquaFx.parzilDebrisSmall;
+            createRubble = false;
+            layer = Layer.power - 3;
+            shadowLayer = Layer.power - 4;
+            shadowOffset = -6;
+        }};
         varcaudStalk = new FloraBlock("varcaud-stalk") {{
             shadowAlpha = 0.6f;
             buildVisibility = sandboxOnly;
@@ -970,6 +1027,19 @@ public class EnvironmentBlocks {
             destroyEffect = Fx.breakProp;
             createRubble = false;
             buildTime = 35 * 60f;
+        }};
+        scrapChunks = new OverlayFloor("scrap-chunks") {{
+            variants = 3;
+        }};
+        scrapFloor = new AquaFloor("scrap-floor", 3) {{
+            itemDrop = scrap;
+            itemDropMultiplier = 2f;
+            playerUnmineable = true;
+        }};
+        scrapWall = new StaticWall("scrap-wall") {{
+            itemDrop = scrap;
+            variants = 2;
+            playerUnmineable = true;
         }};
         basaltRock = new rokBlock("basalt-rock") {{
             requirements(Category.effect, with(zinc, 100, silicon, 150));
@@ -1198,6 +1268,18 @@ public class EnvironmentBlocks {
             variants = 2;
             lightColor = Color.valueOf("f1563c45");
             lightRadius = 40;
+            emitLight = true;
+        }};
+        tranticaOvergrownFloor = new Floor("trantica-overgrowth-floor") {{
+                variants = 4;
+            lightColor = Color.valueOf("f1563c45");
+            lightRadius = 16;
+            emitLight = true;
+            }};
+        tranticaOvergrownWall = new StaticWall("trantica-overgrowth-wall") {{
+            variants = 3;
+            lightColor = Color.valueOf("f1563c45");
+            lightRadius = 16;
             emitLight = true;
         }};
         herylBush = new WobbleProp("heryl-bush"){{

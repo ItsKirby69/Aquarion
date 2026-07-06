@@ -47,7 +47,7 @@ public class rokBlock extends Block {
     public class rokBlockBuild extends Building {
         //prevents the tree from breaking during wave shockwave
         //shamelessly stolen from Minedustry
-        //no, it totally didnt take me over an hour to find out that i have to actually put this INTO the thing that defines florablock as a building; i didnt even know it did this
+        //i did this after flora, so it was very fast
         @Override
         public void damage(float amount){
             if(amount >= 1e7f){

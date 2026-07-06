@@ -40,7 +40,7 @@ import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.with;
 
 public class PowerBlocks {
-    public static Block defunctGenerator, miniumReactor, singularityReactor, advSolarGen, defunctNode, leadBurner, petroleumEngine, heatExchanger, energyBank, voltageSupplyUnit, turbineDynamo, solarGenerator, hydroxideReactor, heatEngine, pylon, outlet, capacitorBank, ionBattery, radiator, compressor, channel, fumeEngine;
+    public static Block defunctGenerator, largeDefunctGenerator, miniumReactor, singularityReactor, advSolarGen, defunctNode, leadBurner, petroleumEngine, heatExchanger, energyBank, voltageSupplyUnit, turbineDynamo, solarGenerator, hydroxideReactor, heatEngine, pylon, outlet, capacitorBank, ionBattery, radiator, compressor, channel, fumeEngine;
 
     public static <T extends UnlockableContent> void overwrite(UnlockableContent target, Cons<T> setter) {
         setter.get((T) target);
@@ -94,6 +94,17 @@ public class PowerBlocks {
             category = Category.power;
             powerProduction = 4;
             baseExplosiveness = 2;
+            maxNodes = 10;
+            maxRange = 1;
+            laserRange = 1;
+        }};
+        largeDefunctGenerator = new PowerSource("large-defunct-generator"){{
+            requirements(Category.power, with(silicon, 1500, lead, 750, metaglass, 500));
+            size = 3;
+            buildVisibility = BuildVisibility.sandboxOnly;
+            category = Category.power;
+            powerProduction = 8;
+            baseExplosiveness = 4;
             maxNodes = 10;
             maxRange = 1;
             laserRange = 1;
