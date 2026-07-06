@@ -46,7 +46,13 @@ public class DefensiveNeoplasiaBlock extends GenericNeoplasiaBlock{
                 return;
             }
 
-            grow();
+            if (!NeoplasiaGraph.isConnected(this)) {
+                disconnectionTime += delta();
+                amount -= amount * (0.001f + disconnectionTime * 0.00005f) * delta();
+            } else {
+                disconnectionTime = 0f;
+                grow();
+            }
             burstSpread();
             damageNearby();
             if(damageUpgrade != null && recentDamage <= reverseUpgradeThreshold){
