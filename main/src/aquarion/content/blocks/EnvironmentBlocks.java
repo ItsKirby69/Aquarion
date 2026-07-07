@@ -20,6 +20,7 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.Radar;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.Attribute;
@@ -43,7 +44,7 @@ public class EnvironmentBlocks {
     //metal walls
     public static Block metalWall3, metalWall4, metalWall5, metalWall6, metalWall7, metalWall1, metalWalltwo;
     //defunct stuff
-    public static Block scrapWall, defunctFramingCross, defunctConstruct, defunctFlooring, crasindFloor,
+    public static Block scrapWall, defunctFramingCross, smallDefunctRadarTower, defunctFlooring, crasindFloor,
             CrasseCoral;
     //deconstructible plants and rocks and stuff (except defunct stuff)
     public static Block relBlossom, bramble, brulrFern, largeTranticaBush, tyrqPod, bigTyrqPod, scrap1,scrap2,scrap3, varcaudStalk, deadVarcaudStalk, stoneRock, largeStoneRock, hugeStoneRock, massiveStoneRock, basaltRock, largeBasaltRock,
@@ -100,8 +101,15 @@ public class EnvironmentBlocks {
             isLiquid = true;
             status = StatusEffects.burning;
             attributes.set(Attribute.heat, 0.8f);
-            cacheLayer =  CacheLayer.slag;
+            cacheLayer =  AquaShaders.sslagLayer2;
             variants = 5;
+            drawEdgeOut = false;
+            drawEdgeIn = true;
+            emitLight = true;
+            lightRadius = 40f;
+            lightColor = Color.orange.cpy().a(0.38f);
+            obstructsLight = true;
+            forceDrawLight = true;
         }};
         shallowYellowstoneSlag = new Floor("shallow-yellowstone-slag") {{
             speedMultiplier = 0.25f;
@@ -110,8 +118,15 @@ public class EnvironmentBlocks {
             isLiquid = true;
             status = StatusEffects.burning;
             attributes.set(Attribute.heat, 0.8f);
-            cacheLayer =  CacheLayer.slag;
+            cacheLayer =  AquaShaders.sslagLayer2;
+            emitLight = true;
+            lightRadius = 40f;
+            lightColor = Color.orange.cpy().a(0.38f);
+            obstructsLight = true;
+            forceDrawLight = true;
             variants = 3;
+            drawEdgeOut = false;
+            drawEdgeIn = true;
         }};
         shallowSlagPlates = new AquaTiledFloor("shallow-slag-plates") {{
             speedMultiplier = 0.1f;
@@ -124,7 +139,14 @@ public class EnvironmentBlocks {
             attributes.set(Attribute.heat, 0.8f);
             supportsOverlay = true;
             overlayAlpha = 1;
-            cacheLayer =  CacheLayer.slag;
+            cacheLayer =  AquaShaders.sslagLayer2;
+            emitLight = true;
+            lightRadius = 40f;
+            lightColor = Color.orange.cpy().a(0.38f);
+            obstructsLight = true;
+            forceDrawLight = true;
+            drawEdgeOut = false;
+            drawEdgeIn = true;
         }};
         /*aquaslag = new Floor("aquaslag"){{
             drownTime = 230f;
@@ -144,18 +166,6 @@ public class EnvironmentBlocks {
             supportsOverlay = true;
             overlayAlpha = 1;
         }};*/
-        shallowSlag2 = new Floor("shallow-slag2") {{
-            speedMultiplier = 0.1f;
-            variants = 0;
-            liquidDrop = Liquids.slag;
-            liquidMultiplier = 0.5f;
-            isLiquid = true;
-            status = StatusEffects.burning;
-            attributes.set(Attribute.heat, 1.1f);
-            cacheLayer = AquaShaders.sslagLayer2;
-            drawEdgeIn = true;
-            drawEdgeOut = false;
-        }};
         wetRocks = new Floor("wet-rocks") {{
             speedMultiplier = 0.1f;
             variants = 0;
@@ -613,17 +623,22 @@ public class EnvironmentBlocks {
         scorche = new OverlayFloor("scorche"){{
             variants = 4;
         }};
-        defunctFlooring = new Floor("defunct-flooring-1");
+        defunctFlooring = new Floor("defunct-flooring"){{
+            variants = 0;
+        }};
         defunctFramingCross = new Wall("defunct-framing-cross") {{
-            requirements(Category.defense, with(silicon, 50, lead, 75, graphite, 50));
+            requirements(Category.defense, with(silicon, 25, lead, 15, graphite, 25));
             variants = 2;
             health = 150;
         }};
-        defunctConstruct = new GenericGenerator("defunct-construct") {{
+        smallDefunctRadarTower = new Radar("defunct-small-radar-tower") {{
             size = 3;
-            requirements(Category.crafting, with(silicon, 500, lead, 750, ferricMatter, 50, copper, 750));
+            requirements(Category.effect, with(silicon, 500, lead, 750, ferricMatter, 50, copper, 750));
             health = 1500;
             customShadow = true;
+            consumePower(1f);
+            discoveryTime = 300f;
+            fogRadius = 16;
         }};
         sporeMoss.attributes.set(fertility, 0.75f);
         basalt.attributes.set(metamorphic, 0.5f);

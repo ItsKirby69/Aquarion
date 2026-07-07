@@ -481,7 +481,6 @@ public class RefineryBlocks {
             updateEffectChance = 0.08f;
             updateEffect = Fx.reactorsmoke;
             consumeLiq(petroleum, 1.5f);
-            consumeLiq(petroleum, 1.5f);
             outputItem = new ItemStack(brimstone, 30);
             outputLiquid = new LiquidStack(methane, 2.5f);
             liquidCapacity = 900;
