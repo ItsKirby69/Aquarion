@@ -89,7 +89,7 @@ public class AquaPlanets {
                 r.fire = false;
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
-                r.hideSpawns = true;
+                r.hideSpawns = false;
                 r.coreDestroyClear = true;
                 r.coreIncinerates = true;
                 r.fog = true;
