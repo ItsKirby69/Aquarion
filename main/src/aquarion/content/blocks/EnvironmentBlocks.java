@@ -37,29 +37,38 @@ public class EnvironmentBlocks {
     public static <T extends UnlockableContent> void overwrite(UnlockableContent target, Cons<T> setter) {
         setter.get((T) target);
     }
-    public static Block scrap1,scrap2,scrap3, okelBush, crasindtree, crasindWall, denseStone, stonePores, clay, metalWall1, metalWalltwo, sparseSnow, packedSnow, floorLight, brokenFloorLight, metalPlates1,metalVent, metalBankFloor, damagedPlates1, damagedPlates2, damagedPlates3, damagedPlated4, plates1, metalPlates, plates2,plates3,plates4, metalGrating, azuriteProp, blueSandBoulder, brecciaBoulder, chertBoulder,
-            arsenideBoulder, feldsparBoulder, gabbroBoulder,
-            ultrafamicBoulder;
-    public static Block parzilSprig, crasindSprout, crasindLitter, scrapChunks, scrapWall, scrapFloor, defunctFramingCross, defunctConstruct, defunctFlooring, crasindFloor,
-            CrasseCoral,stoneRock,largeStoneRock,hugeStoneRock,massiveStoneRock, basaltRock, largeBasaltRock, hugeBasaltRock, massiveBasaltRock,shaleChunk, largeShaleChunk;
-    public static Block varcaudStalk, deadVarcaudStalk, qusGrass, kolFern, adreSprig, leafLitter, leafLitterDense, iceWater, clearWater, blueSandFLoor, blueSandWater, redSandFLoor, brecciaFloor, soil, fertileSoil,
-            smoothBrecciaFloor, arsenideFloor, arsenideLayers, chertFloor,
-            chertPlates, greenCoralFloor, BlueCoralFloor, redCoralFloor,
-            andesiteLayers, basaltSpikes, basaltHolePlates, pinkSaltBoulder, algal_carpet, brine_liquid, lava, shallowSlag2, wetRocks, shallowSlag, shallowYellowstoneSlag, shallowSlagPlates, shallowLava,
-            coral_floor,cupriteBoulder,cupriteWall,cupriteChunks, cupriteFloor, feldspar_vent, feldspar, ferric_extrusions,
-            gabbro_extrusions, gabbro_vent, gabbro, petroleumFloor, petroleumSeep, geothermal_vent, rubble,
-             metal13, metal14, metal15, metal16, roughFeldspar, glassFloor, feldsparPebbles, feldsparRubble, smoothFeldspar, phylite_floor, slate, ultrafamicFloor, brimstoneFloor, brimstoneVent,
-            boricFloor, pinkSaltFloor, pinkSaltFlats, smoothPinkSaltFloor, pinkSaltWall, pinkSaltCrystals, boricFloorDense, tile, relBlossom, bramble, brulrFern,
-            shaleVent, andesite, andesiteRubble, andesiteVent, basaltPlates, ultrafamicPlates,metal1, metal2, metal3, metal4, metal5, metal6, metal7, metal8, metal9, metal10, metal11, metal12;
-    public static Block oreNickelWall, scorche, oreRadium, oreUranium, orePitchblende, nickelFloor,
-            oreNickel, oreBauxite, oreAluminum, oreSilicon, acuminiteOre, ferricOre, serpentineOre, miniumOre, pentlanditeOre;
-    public static Block towaniteCluster, azuriteLarge, blueSandWall,redSandWall, brecciaWall, ultrafamicWall, exposedSerpentine,
-             boricWall, arsenideWall, chertWall, metalWall3, metalWall4, metalWall5, metalWall6, metalWall7, metalFloor1, metalFloor2, blueMetalFloor1,
-            chertOutcrop, feldsparOutcrop, pillarCoral, loteasCoral, songCoral,
-             algalBloom, parzilPine, algalWall,
-            bloom, blueCoralWall, redCoralWall, greenCoralWall,
-            feldsparWall, gabbroWall, andesiteExtrusions, CrystalGalena,
-            elderParzil, ksaRoot, yulrCoral, bewCoral, herylBush, tranticaBush,largeTranticaBush, tranticaOvergrownWall, tranticaOvergrownFloor, regoubloom, tyrqPod, bigTyrqPod, basaltBluff, basaltOutcrop;
+    //metal floors
+    public static Block metalFloor1, metalFloor2, blueMetalFloor1, metal1, metal2, metal3, metal4, metal5, metal6, metal7, metal8, metal9, metal10, metal11, metal12, metal13, metal14, metal15, metal16, floorLight, brokenFloorLight, metalPlates1,
+            glassFloor, metalBankFloor, damagedPlates1, damagedPlates2, damagedPlates3, damagedPlated4, plates1, metalPlates, plates2,plates3,plates4, metalGrating;
+    //metal walls
+    public static Block metalWall3, metalWall4, metalWall5, metalWall6, metalWall7, metalWall1, metalWalltwo;
+    //defunct stuff
+    public static Block scrapWall, defunctFramingCross, defunctConstruct, defunctFlooring, crasindFloor,
+            CrasseCoral;
+    //deconstructible plants and rocks and stuff (except defunct stuff)
+    public static Block relBlossom, bramble, brulrFern, largeTranticaBush, tyrqPod, bigTyrqPod, scrap1,scrap2,scrap3, varcaudStalk, deadVarcaudStalk, stoneRock, largeStoneRock, hugeStoneRock, massiveStoneRock, basaltRock, largeBasaltRock,
+            hugeBasaltRock, massiveBasaltRock, shaleChunk, largeShaleChunk, crasindtree, parzilPine, elderParzil;
+    //boulders and other such stuff
+    public static Block azuriteProp, ksaRoot, okelBush, cupriteChunks, herylBush, parzilSprig, crasindSprout, kolFern, pinkSaltBoulder,cupriteBoulder, adreSprig, blueSandBoulder, brecciaBoulder, chertBoulder, arsenideBoulder,
+            feldsparBoulder, gabbroBoulder, ultrafamicBoulder;
+    //the large wall ore thingys and other tall blocks
+    public static Block andesiteExtrusions, CrystalGalena, basaltBluff, towaniteCluster, azuriteLarge, pinkSaltCrystals, bewCoral, yulrCoral, tranticaBush, regoubloom, pillarCoral, loteasCoral, songCoral;
+    //overlays
+    public static Block scrapChunks, scorche, crasindLitter, sparseSnow;
+    //floors
+    public static Block  tranticaOvergrownFloor, smoothBrecciaFloor, arsenideFloor, arsenideLayers, chertFloor, algal_carpet, coral_floor, cupriteFloor, feldspar, ferric_extrusions,
+            gabbro_extrusions, gabbro, petroleumFloor, petroleumSeep, rubble, roughFeldspar, feldsparPebbles, feldsparRubble, smoothFeldspar, phylite_floor, slate, ultrafamicFloor, brimstoneFloor,
+            boricFloor, pinkSaltFloor, pinkSaltFlats, smoothPinkSaltFloor, boricFloorDense, andesite, basaltPlates, ultrafamicPlates, chertPlates, greenCoralFloor, BlueCoralFloor, redCoralFloor,
+            andesiteLayers, basaltSpikes, basaltHolePlates, blueSandFLoor, redSandFLoor, brecciaFloor, soil, fertileSoil, nickelFloor, scrapFloor, andesiteRubble, qusGrass, clay, leafLitter, leafLitterDense, denseStone, stonePores, packedSnow;
+    //liquids
+    public static Block clearWater, blueSandWater, iceWater, brine_liquid, lava, shallowSlag2, wetRocks, shallowSlag, shallowYellowstoneSlag, shallowSlagPlates, shallowLava;
+    // ores
+    public static Block oreNickelWall, oreRadium, oreUranium, orePitchblende, oreNickel, oreBauxite, oreAluminum, oreSilicon, acuminiteOre, ferricOre, serpentineOre, miniumOre, pentlanditeOre;
+    //walls
+    public static Block blueSandWall,redSandWall, brecciaWall, ultrafamicWall, exposedSerpentine,crasindWall, cupriteWall, pinkSaltWall, boricWall, arsenideWall, chertWall, chertOutcrop, feldsparOutcrop, algalBloom, algalWall, bloom,
+            blueCoralWall, redCoralWall, greenCoralWall, feldsparWall, gabbroWall, tranticaOvergrownWall, basaltOutcrop;
+    //vents and such
+    public static Block brimstoneVent, geothermal_vent, feldspar_vent, shaleVent, gabbro_vent, andesiteVent, metalVent;
 
     public static void loadContent() {
         //TODO fix the blend group
