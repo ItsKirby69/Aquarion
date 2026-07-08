@@ -8,8 +8,6 @@ import arc.graphics.g2d.TextureRegion;
 import arc.struct.Seq;
 import com.squareup.javapoet.ClassName;
 import com.sun.tools.javac.code.Attribute;
-import com.sun.tools.javac.code.Attribute.Enum;
-import com.sun.tools.javac.code.Attribute.Error;
 import com.sun.tools.javac.code.Attribute.*;
 import com.sun.tools.javac.code.Scope.WriteableScope;
 import com.sun.tools.javac.code.Symbol;
@@ -686,7 +684,7 @@ public class Annotations{
             }
 
             @Override
-            public void visitEnum(Enum var1){
+            public void visitEnum(Attribute.Enum var1){
                 if(this.returnClass.isEnum()){
                     String var2 = var1.value.toString();
 
@@ -711,7 +709,7 @@ public class Annotations{
             }
 
             @Override
-            public void visitError(Error var1){
+            public void visitError(Attribute.Error var1){
                 if(var1 instanceof UnresolvedClass){
                     this.value = mirrorProxy(((UnresolvedClass)var1).classType);
                 }else{

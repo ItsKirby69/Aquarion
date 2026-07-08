@@ -444,6 +444,6 @@ public class CoradumPlanetGenerator extends PlanetGenerator{
 
         //all sectors are wave sectors
         state.rules.waves = false;
-        state.rules.showSpawns = true;
+        state.rules.hideSpawns = false;
     }
 }

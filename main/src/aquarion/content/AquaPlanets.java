@@ -89,7 +89,7 @@ public class AquaPlanets {
                 r.fire = false;
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
-                r.showSpawns = true;
+                r.hideSpawns = false;
                 r.coreDestroyClear = true;
                 r.coreIncinerates = true;
                 r.fog = true;
@@ -98,7 +98,7 @@ public class AquaPlanets {
                 r.deconstructRefundMultiplier = 1.01f;
             };
             campaignRuleDefaults.fog = false;
-            campaignRuleDefaults.showSpawns = true;
+            campaignRuleDefaults.hideSpawns = false;
             campaignRuleDefaults.rtsAI = false;
             allowCampaignRules = true;
             orbitSpacing = 6f;
@@ -138,7 +138,7 @@ public class AquaPlanets {
                 r.fire = true;
                 r.waveTeam = Team.crux;
                 r.placeRangeCheck = false;
-                r.showSpawns = true;
+                r.hideSpawns = false;
                 r.coreIncinerates = true;
                 r.coreDestroyClear = false;
                 r.fog = false;
@@ -147,7 +147,7 @@ public class AquaPlanets {
                 r.deconstructRefundMultiplier = 1.01f;
             };
             campaignRuleDefaults.fog = false;
-            campaignRuleDefaults.showSpawns = true;
+            campaignRuleDefaults.hideSpawns = false;
             campaignRuleDefaults.rtsAI = false;
             allowCampaignRules = true;
         }};
@@ -220,7 +220,7 @@ public class AquaPlanets {
                 r.weather.addAll(new Weather.WeatherEntry(AquaWeathers.currents), new Weather.WeatherEntry(AquaWeathers.sedimentDisturance), new Weather.WeatherEntry(AquaWeathers.bioluminescentBlooms));
                 r.fire = false;
                 r.placeRangeCheck = false;
-                r.showSpawns = true;
+                r.hideSpawns = false;
                 r.coreDestroyClear = true;
                 r.fog = false;
                 r.staticFog = false;
