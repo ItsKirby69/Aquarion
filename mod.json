@@ -6,7 +6,7 @@
 "author": "twcash",
 "description": "A complete rewrite of the campaign. Currently in heavy development.",
 "version": "4.0.2",
-"minGameVersion": "159.1",
+"minGameVersion": "159.2",
 "hidden": false,
 "java": true,
 "main": "aquarion.AquaLoader"
