@@ -19,28 +19,28 @@ import mindustry.world.meta.Env;
 
 public class AquaPlanets {
     public static Planet
-    tantros2,
-    qeraltar,
-    citun,
-    fakeSerpulo,
-    fakeErekir,
-    ring1,
-    delubrum,
-    coradum;
+            tantros2,
+            qeraltar,
+            citun,
+            fakeSerpulo,
+            fakeErekir,
+            ring1,
+            delubrum,
+            coradum;
 
     public static void loadContent() {
         citun = new Planet("citun", null, 14f){{
             bloom = true;
             accessible = false;
             cloudMeshLoader = () -> new MultiMesh(
-                new HexSkyMesh(this, 3, 0.13f, 0.11f, 5, Color.valueOf("3b64ff").a(0.99f), 2, 0.18f, 1.2f, 0.3f),
-                new HexSkyMesh(this, 3, 0.14f, 0.12f, 5, Color.valueOf("3b64ff").a(0.99f), 2, 0.17f, 1.3f, .28f),
-                new HexSkyMesh(this, 3, 0.15f, 0.15f, 5, Color.valueOf("477ef2").a(0.95f), 2, 0.16f, 1.4f, 0.26f),
-                new HexSkyMesh(this, 3, 0.16f, 0.17f, 5, Color.valueOf("55a3ef").a(0.90f), 2, 0.15f, 1.5f, 0.24f),
-                new HexSkyMesh(this, 3, 0.18f, 0.22f, 5, Color.valueOf("86d1e9").a(0.85f), 2, 0.14f, 1.7f, 0.22f),
-                new HexSkyMesh(this, 3, 0.22f, 0.28f, 5, Color.valueOf("aee6f8").a(0.65f), 2, 0.12f, 1.9f, 0.20f),
-                new HexSkyMesh(this, 3, 0.26f, 0.36f, 5, Color.valueOf("c8f2ff").a(0.50f), 2, 0.10f, 2.3f, 0.17f),
-                new HexSkyMesh(this, 3, 0.32f, 0.43f, 5, Color.valueOf("ffffff").a(0.22f), 2, 0.08f, 2.6f, 0.12f)
+                    new HexSkyMesh(this, 3, 0.13f, 0.11f, 5, Color.valueOf("3b64ff").a(0.99f), 2, 0.18f, 1.2f, 0.3f),
+                    new HexSkyMesh(this, 3, 0.14f, 0.12f, 5, Color.valueOf("3b64ff").a(0.99f), 2, 0.17f, 1.3f, .28f),
+                    new HexSkyMesh(this, 3, 0.15f, 0.15f, 5, Color.valueOf("477ef2").a(0.95f), 2, 0.16f, 1.4f, 0.26f),
+                    new HexSkyMesh(this, 3, 0.16f, 0.17f, 5, Color.valueOf("55a3ef").a(0.90f), 2, 0.15f, 1.5f, 0.24f),
+                    new HexSkyMesh(this, 3, 0.18f, 0.22f, 5, Color.valueOf("86d1e9").a(0.85f), 2, 0.14f, 1.7f, 0.22f),
+                    new HexSkyMesh(this, 3, 0.22f, 0.28f, 5, Color.valueOf("aee6f8").a(0.65f), 2, 0.12f, 1.9f, 0.20f),
+                    new HexSkyMesh(this, 3, 0.26f, 0.36f, 5, Color.valueOf("c8f2ff").a(0.50f), 2, 0.10f, 2.3f, 0.17f),
+                    new HexSkyMesh(this, 3, 0.32f, 0.43f, 5, Color.valueOf("ffffff").a(0.22f), 2, 0.08f, 2.6f, 0.12f)
 
             );
             meshLoader = () -> new SunMesh(
@@ -55,12 +55,20 @@ public class AquaPlanets {
                     Color.valueOf("d2e5ea")
             );
         }};
+//        ring1 = makeAsteroid("ring", fakeSerpulo, Blocks.ferricStoneWall, Blocks.carbonWall, -5, 0.4f, 9, 1f, gen -> {
+//            gen.min = 25;
+//            gen.max = 35;
+//            gen.carbonChance = 0.6f;
+//            gen.iceChance = 0f;
+//            gen.berylChance = 0.1f;
+//        });
+
         fakeErekir = new Planet("fakeErekir", citun, 1.5f, 3){{
             generator = new ErekirPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 5);
             alwaysUnlocked = false;
             orbitOffset = 85;
-            orbitRadius = 35;
+            orbitRadius = 60;
             atmosphereRadIn = 0.02f;
             atmosphereRadOut = 0.3f;
             defaultEnv = Env.scorching | Env.terrestrial;
@@ -74,23 +82,23 @@ public class AquaPlanets {
             clearSectorOnLose = false;
             allowLaunchToNumbered = false;
             cloudMeshLoader = () -> new MultiMesh(
-                new HexSkyMesh(this, 2, 0.15f, 0.14f, 5, Color.valueOf("eba768").a(0.75f), 2, 0.42f, 1f, 0.43f),
-                new HexSkyMesh(this, 3, 0.6f, 0.15f, 5, Color.valueOf("eea293").a(0.75f), 2, 0.42f, 1.2f, 0.45f)
+                    new HexSkyMesh(this, 2, 0.15f, 0.14f, 5, Color.valueOf("eba768").a(0.75f), 2, 0.42f, 1f, 0.43f),
+                    new HexSkyMesh(this, 3, 0.6f, 0.15f, 5, Color.valueOf("eea293").a(0.75f), 2, 0.42f, 1.2f, 0.45f)
             );
             ruleSetter = r -> {
                 r.fire = false;
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
-                r.showSpawns = true;
+                r.hideSpawns = false;
                 r.coreDestroyClear = true;
                 r.coreIncinerates = true;
                 r.fog = true;
                 r.staticFog = true;
                 r.onlyDepositCore = true;
-                r.deconstructRefundMultiplier = 1f;
+                r.deconstructRefundMultiplier = 1.01f;
             };
             campaignRuleDefaults.fog = false;
-            campaignRuleDefaults.showSpawns = true;
+            campaignRuleDefaults.hideSpawns = false;
             campaignRuleDefaults.rtsAI = false;
             allowCampaignRules = true;
             orbitSpacing = 6f;
@@ -109,9 +117,9 @@ public class AquaPlanets {
             iconColor = Color.valueOf("#7d4dff");
             atmosphereColor = Color.valueOf("#3c1b8f");
             cloudMeshLoader = () -> new MultiMesh(
-                new HexSkyMesh(this, 3, 0.13f, 0.11f, 6, Color.valueOf("#a4e8eca8").mul(0.9f).a(0.75f), 2, 0.18f, 1.2f, 0.24f),
-                new HexSkyMesh(this, 5, 0.7f, 0.09f, 6, Color.white.cpy().lerp(Color.valueOf("#c6f2f496"), 0.75f), 3, 0.12f, 1.5f, 0.28f),
-                new HexSkyMesh(this, 8, 0.3f, 0.08f, 6, Color.white.cpy().lerp(Color.valueOf("#f8e7ff8d"), 0.55f), 2, 0.08f, 1.6f, 0.30f)
+                    new HexSkyMesh(this, 3, 0.13f, 0.11f, 6, Color.valueOf("#a4e8eca8").mul(0.9f).a(0.75f), 2, 0.18f, 1.2f, 0.24f),
+                    new HexSkyMesh(this, 5, 0.7f, 0.09f, 6, Color.white.cpy().lerp(Color.valueOf("#c6f2f496"), 0.75f), 3, 0.12f, 1.5f, 0.28f),
+                    new HexSkyMesh(this, 8, 0.3f, 0.08f, 6, Color.white.cpy().lerp(Color.valueOf("#f8e7ff8d"), 0.55f), 2, 0.08f, 1.6f, 0.30f)
             );
             atmosphereRadIn = -0.02f;
             atmosphereRadOut = 0.2f;
@@ -130,16 +138,16 @@ public class AquaPlanets {
                 r.fire = true;
                 r.waveTeam = Team.crux;
                 r.placeRangeCheck = false;
-                r.showSpawns = true;
+                r.hideSpawns = false;
                 r.coreIncinerates = true;
                 r.coreDestroyClear = false;
                 r.fog = false;
                 r.staticFog = false;
                 r.onlyDepositCore = true;
-                r.deconstructRefundMultiplier = 1f;
+                r.deconstructRefundMultiplier = 1.01f;
             };
             campaignRuleDefaults.fog = false;
-            campaignRuleDefaults.showSpawns = true;
+            campaignRuleDefaults.hideSpawns = false;
             campaignRuleDefaults.rtsAI = false;
             allowCampaignRules = true;
         }};
@@ -153,8 +161,8 @@ public class AquaPlanets {
             atmosphereRadOut = 0.19f;
             atmosphereColor = Color.valueOf("798d87");
             cloudMeshLoader = () -> new MultiMesh(
-                new HexSkyMesh(this, 2, 0.16f, 0.17f, 5, Color.valueOf("98a4d2").a(0.75f), 2, 0.42f, 1f, 0.43f),
-                new HexSkyMesh(this, 3, 0.7f, 0.18f, 5, Color.valueOf("dbe2e8").a(0.7f), 2, 0.42f, 1.2f, 0.45f)
+                    new HexSkyMesh(this, 2, 0.16f, 0.17f, 5, Color.valueOf("98a4d2").a(0.75f), 2, 0.42f, 1f, 0.43f),
+                    new HexSkyMesh(this, 3, 0.7f, 0.18f, 5, Color.valueOf("dbe2e8").a(0.7f), 2, 0.42f, 1.2f, 0.45f)
 
             );
         }};
@@ -177,7 +185,6 @@ public class AquaPlanets {
                 r.deconstructRefundMultiplier = 0;
                 r.possessionAllowed = false;
                 r.derelictRepair = false;
-                r.coreIncinerates = true;
             };
             atmosphereRadOut = 0.8f;
             atmosphereColor = Color.valueOf("3db899");
@@ -193,9 +200,9 @@ public class AquaPlanets {
             atmosphereColor = Color.valueOf("#6298b2");
             iconColor = Color.valueOf("#597be3");
             cloudMeshLoader = () -> new MultiMesh(
-                new HexSkyMesh(this, 3, 0.13f, 0.11f, 5, Color.valueOf("#b1d6d8").a(0.75f), 2, 0.18f, 1.2f, 0.25f),
-                new HexSkyMesh(this, 5, 0.7f, 0.09f, 5, Color.valueOf("#c1d6d7").a(0.65f), 3, 0.12f, 1.5f, 0.28f),
-                new HexSkyMesh(this, 8, 0.3f, 0.08f, 5, Color.valueOf("#b5acb9").a(0.65f), 2, 0.08f, 1.6f, 0.3f)
+                    new HexSkyMesh(this, 3, 0.13f, 0.11f, 5, Color.valueOf("#b1d6d8").a(0.75f), 2, 0.18f, 1.2f, 0.25f),
+                    new HexSkyMesh(this, 5, 0.7f, 0.09f, 5, Color.valueOf("#c1d6d7").a(0.65f), 3, 0.12f, 1.5f, 0.28f),
+                    new HexSkyMesh(this, 8, 0.3f, 0.08f, 5, Color.valueOf("#b5acb9").a(0.65f), 2, 0.08f, 1.6f, 0.3f)
             );
             startSector = 10;
             atmosphereRadIn = 0.02f;
@@ -213,14 +220,13 @@ public class AquaPlanets {
                 r.weather.addAll(new Weather.WeatherEntry(AquaWeathers.currents), new Weather.WeatherEntry(AquaWeathers.sedimentDisturance), new Weather.WeatherEntry(AquaWeathers.bioluminescentBlooms));
                 r.fire = false;
                 r.placeRangeCheck = false;
-                r.showSpawns = true;
+                r.hideSpawns = false;
                 r.coreDestroyClear = true;
                 r.fog = false;
                 r.staticFog = false;
                 r.onlyDepositCore = true;
                 r.waveTeam = Team.green;
-                r.deconstructRefundMultiplier = 1f;
-                r.coreIncinerates = true;
+                r.deconstructRefundMultiplier = 1.01f;
             };
         }};
         coradum = new Planet("coradum", citun, 0.85f, 2){{

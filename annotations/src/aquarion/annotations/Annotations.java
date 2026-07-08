@@ -686,7 +686,7 @@ public class Annotations{
             }
 
             @Override
-            public void visitEnum(Enum var1){
+            public void visitEnum(Attribute.Enum var1){
                 if(this.returnClass.isEnum()){
                     String var2 = var1.value.toString();
 
@@ -711,7 +711,7 @@ public class Annotations{
             }
 
             @Override
-            public void visitError(Error var1){
+            public void visitError(Attribute.Error var1){
                 if(var1 instanceof UnresolvedClass){
                     this.value = mirrorProxy(((UnresolvedClass)var1).classType);
                 }else{

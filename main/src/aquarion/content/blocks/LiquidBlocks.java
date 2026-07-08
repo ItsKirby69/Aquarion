@@ -23,6 +23,7 @@ public class LiquidBlocks {
     public static Block blastPump, siphonUnderflow, pipeTank,siphonGullet, siphonReservoir, siphonVessel, pipe, pipeBridge, electrumPump, pulseSiphonBridge, pulseSiphon, siphonBridge, siphonJunction, siphonRouter, siphon;
 
     public static void loadContent() {
+        Liquids.oil.explosiveness = 0.7f;
         siphonBridge = new ModifiedLiquidBridge("siphon-bridge") {{
             requirements(Category.liquid, with(silicon, 35));
             fadeIn = false;
@@ -95,24 +96,23 @@ public class LiquidBlocks {
             health = 110;
             ((ModifiedConduit) siphon).junctionReplacement = this;
         }};
-        Liquids.oil.explosiveness = 0.7f;
-        pipeTank = new ModifiedLiquidRouter("siphon-tank") {{
-            requirements(Category.liquid, with(silicon, 600, metaglass, 500));
-            liquidPadding = 3;
-            squareSprite = false;
-            liquidCapacity = 10000;
-            size = 3;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
-            willMelt = true;
-            envEnabled |= Env.terrestrial | Env.underwater;
-            envDisabled = Env.none;
-        }};
         siphonVessel = new ModifiedLiquidRouter("siphon-vessel") {{
             requirements(Category.liquid, with(silicon, 150, metaglass, 50));
             liquidPadding = 2;
             squareSprite = false;
             liquidCapacity = 4000;
             size = 2;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
+            willMelt = true;
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
+        }};
+        pipeTank = new ModifiedLiquidRouter("siphon-tank") {{
+            requirements(Category.liquid, with(silicon, 600, metaglass, 500));
+            liquidPadding = 3;
+            squareSprite = false;
+            liquidCapacity = 10000;
+            size = 3;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
             willMelt = true;
             envEnabled |= Env.terrestrial | Env.underwater;
