@@ -61,8 +61,6 @@ abstract class DialogueUnitComp implements Unitc, DialogueUnitc, Legsc{
     }
     @Override
     public void add(){
-        team.data().updateCount(type, 1);
-
         if(type instanceof DefunctUnitType t) say(random(t.spawnLines), 120f);
     }
 
