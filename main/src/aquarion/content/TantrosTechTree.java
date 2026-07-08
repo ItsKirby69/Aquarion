@@ -473,9 +473,6 @@ public class TantrosTechTree {
                 node(pumpAssembly);
             });
             node(harvester, () -> {
-                node(filter, Seq.with(
-                        new Objectives.SectorComplete(bay)
-                ), () -> {});
                 node(plasmaExtractor, () -> {
                     node(beamBore, () -> {});
                 });
@@ -552,7 +549,11 @@ public class TantrosTechTree {
                 node(AnnealingOven, () -> {
                     node(scrapCentrifuge, Seq.with(
                             new Objectives.OnSector(frozenLake)
-                    ), () -> {});
+                    ), () -> {
+                        node(filter, Seq.with(
+                                new Objectives.SectorComplete(bay)
+                        ), () -> {});
+                    });
                     node(cupronickelAlloyer, Seq.with(
                             new Objectives.SectorComplete(resurgence)
                     ), () -> {
