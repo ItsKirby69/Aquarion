@@ -5,6 +5,7 @@ import aquarion.content.AquaCategories;
 import aquarion.content.AquaItems;
 import aquarion.content.AquaSounds;
 import aquarion.world.blocks.heatBlocks.HotHeatConductor;
+import aquarion.world.blocks.production.Filter;
 import aquarion.world.blocks.production.ModifiedbeamDrill;
 import aquarion.world.consumers.ConsumeLiquidAcidic;
 import aquarion.world.drawers.*;
@@ -12,20 +13,16 @@ import aquarion.world.drawers.DrawBlockParts;
 import aquarion.world.entities.parts.NewRegPart;
 import aquarion.world.graphics.AquaFx;
 import aquarion.world.graphics.AquaPal;
-import aquarion.world.graphics.NewParticleEffect;
 import aquarion.world.type.AquaGenericCrafter;
 import aquarion.world.type.GroundDrill;
-import arc.Core;
 import arc.func.Cons;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.math.Interp;
-import arc.math.Mathf;
 import mindustry.content.*;
 import mindustry.ctype.UnlockableContent;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.ParticleEffect;
-import mindustry.entities.effect.RadialEffect;
 import mindustry.entities.effect.SeqEffect;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Layer;
@@ -53,7 +50,6 @@ import static aquarion.content.AquaPlanets.*;
 import static aquarion.world.graphics.Renderer.Layer.heat;
 import static aquarion.world.graphics.Renderer.Layer.shadow;
 import static arc.math.Interp.linear;
-import static arc.math.Interp.pow5Out;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.with;
@@ -65,6 +61,7 @@ public class CrafterBlocks {
              algalTerrace, steelFoundry, pinDrill, inlet, inletArray, atmosphericIntake,nuetralizationChamber,
             AnnealingOven, SolidBoiler, CentrifugalPump, pumpAssembly, harvester, DrillDerrick, beamBore, fumeMixer, plasmaExtractor,
             fumeFilter, ferroSiliconFoundry, magmaTap;
+    public static Block filter;
     public static <T extends UnlockableContent> void overwrite(UnlockableContent target, Cons<T> setter) {
         setter.get((T) target);
     }
@@ -1852,6 +1849,44 @@ public class CrafterBlocks {
             r.consumeItems(ItemStack.with(sporePod, 1));
             r.craftTime = 60;
         });
+
+        filter = new Filter("filter") {{
+            requirements(Category.crafting, with(copper, 350, silicon, 100, metaglass, 100, nickel, 150));
+
+            buildTime = 2200f;
+            health = 200;
+            craftTime = 100f;
+            size = 7;
+            itemCapacity = 20;
+            liquidCapacity = 300f;
+
+            consumePower(2.0f);
+            consumeLiquid(mindustry.content.Liquids.water, 4.25f); // 0.1 it`s 6 water
+            outputLiquidAmount = 255f;
+
+            results = new ItemStack[]{
+                    new ItemStack(Items.sand, 13),
+                    new ItemStack(Items.copper, 12),
+                    new ItemStack(Items.lead, 12),
+                    new ItemStack(Items.silicon, 12),
+                    new ItemStack(AquaItems.nickel, 12)
+            }; // items production
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+
+                    new DrawRegion("-underwater"),
+
+                    new DrawLiquidTile(mindustry.content.Liquids.water, 2f) {{
+                        padBottom = 28f;
+                    }},
+
+                    new DrawLiquidTile(aquarion.content.AquaLiquids.clearwater, 2f) {{
+                        padTop = 28f;
+                    }},
+
+                    new DrawDefault()
+            );
+        }};
     }
 
     public static void disableVanilla() {

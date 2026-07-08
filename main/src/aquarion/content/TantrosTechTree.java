@@ -393,6 +393,9 @@ public class TantrosTechTree {
                 nodeProduce(nickel, () -> {
                     nodeProduce(air, () -> {
                         nodeProduce(water, () -> {
+                            nodeProduce(clearwater,Seq.with(
+                                    new Objectives.Research(filter)
+                            ), () -> {});
                             nodeProduce(halideWater, () -> {
                                 nodeProduce(muriaticAcid, () -> {
                                     nodeProduce(hydroxide, () -> {});
@@ -470,6 +473,9 @@ public class TantrosTechTree {
                 node(pumpAssembly);
             });
             node(harvester, () -> {
+                node(filter, Seq.with(
+                        new Objectives.SectorComplete(bay)
+                ), () -> {});
                 node(plasmaExtractor, () -> {
                     node(beamBore, () -> {});
                 });

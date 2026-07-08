@@ -8,8 +8,6 @@ import arc.graphics.g2d.TextureRegion;
 import arc.struct.Seq;
 import com.squareup.javapoet.ClassName;
 import com.sun.tools.javac.code.Attribute;
-import com.sun.tools.javac.code.Attribute.Enum;
-import com.sun.tools.javac.code.Attribute.Error;
 import com.sun.tools.javac.code.Attribute.*;
 import com.sun.tools.javac.code.Scope.WriteableScope;
 import com.sun.tools.javac.code.Symbol;
