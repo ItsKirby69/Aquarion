@@ -29,6 +29,8 @@ public class SealedRouter extends Router {
 
     public SealedRouter(String name) {
         super(name);
+        drawCached = false;
+        drawDynamic = true;
     }
 
     @Override
