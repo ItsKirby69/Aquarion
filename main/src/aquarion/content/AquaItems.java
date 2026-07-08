@@ -31,6 +31,7 @@ public class AquaItems {
     public static Item nickel;
     public static Item bauxite;
     public static Item zinc;
+
     public static void load() {
         Items.lead.alwaysUnlocked = true;
         Items.silicon.alwaysUnlocked = true;
