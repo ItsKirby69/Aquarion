@@ -259,7 +259,6 @@ public class GroundDrill extends AquaBlock {
             if(hasHeat) stats.add(Stat.booster, AquaStats.heatBooster(heatRequirement, overheatScale, baseEfficiency, maxEfficiency, flipHeatScale));
         }
         if (itemBoostIntensity != 1 && findConsumer(f -> f instanceof ConsumeItems && f.booster) instanceof ConsumeItems coni) {
-            stats.remove(Stat.booster);
             stats.add(Stat.booster, AquaStats.itemBoosters("{0}" + StatUnit.timesSpeed.localized(), stats.timePeriod, itemBoostIntensity, 0f, coni.items, ItemBoostUseTime));
         }
         if (liquidBoostIntensity != 1 && findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase consBase) {

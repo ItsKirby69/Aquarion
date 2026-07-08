@@ -27,7 +27,7 @@ ext{
     fetchPackage = modName.replaceAll("-", "") + '/fetched'
     fetchDir = file("${generatedSourcesDir}/fetchComps/java/main/$fetchPackage")
     fetchTemp = file("${generatedSourcesDir}/fetchComps/fetch.txt")
-    fetchRevision = 0
+    fetchRevision = 1
 }
 
 
@@ -83,17 +83,27 @@ task dex(type: Jar){
 
 class Fetcher{
     UnsafeRunnable run
+    int retries = 3
+    long[] backoffMs = [2000L, 5000L, 15000L]
     private volatile Throwable error = null
 
     @SuppressWarnings('all')
     void execute(){
-        try{
-            run.run()
-            error = null
-        }catch(Throwable e){
-            Log.err(e)
-            error = e
+        Throwable last = null
+        for(int attempt = 0; attempt <= retries; attempt++){
+            try{
+                run.run()
+                error = null
+                return
+            }catch(Throwable e){
+                last = e
+                Log.info("fetch attempt " + (attempt + 1) + "/" + (retries + 1) + " failed: " + e)
+                if(attempt < retries && backoffMs[attempt] > 0){
+                    try{ Thread.sleep(backoffMs[attempt]) }catch(InterruptedException ie){ Thread.currentThread().interrupt() }
+                }
+            }
         }
+        error = last
     }
 }
 
@@ -109,6 +119,7 @@ task fetchComps{
         fetchDir.mkdirs()
 
         final CopyOnWriteArrayList<Fetcher> fetches = new CopyOnWriteArrayList<>()
+        def expectedFilenames = Collections.synchronizedList(new ArrayList<String>())
 
         UnsafeRunnable mainRun = {
             Http.get("https://api.github.com/repos/Anuken/Mindustry/contents/core/src/mindustry/entities/comp?ref=$mindustryFetchVersion")
@@ -119,6 +130,8 @@ task fetchComps{
                         for(final Jval val : list){
                             final def filename = val.get('name').asString()
                             final def fileurl = val.get('download_url').asString()
+
+                            expectedFilenames.add(filename)
 
                             final UnsafeRunnable run = {
                                 Http.get(fileurl)
@@ -160,6 +173,14 @@ task fetchComps{
 
         threads.each(Thread::start)
         while(!fetches.isEmpty()) Thread.currentThread().yield()
+
+        def missing = []
+        for(String name : expectedFilenames){
+            if(!Fi.get("$fetchDir/$name").exists()) missing.add(name)
+        }
+        if(!missing.isEmpty()){
+            throw new GradleException("fetchComps: " + missing.size() + "/" + expectedFilenames.size() + " comp files failed to download: " + missing)
+        }
 
         fetchTemp.text = "$mindustryVersion/$fetchRevision"
     }

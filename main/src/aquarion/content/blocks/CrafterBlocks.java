@@ -453,7 +453,6 @@ public class CrafterBlocks {
                 liquidBoostIntensity = 3f;
                 heatColor = Color.valueOf("9d8cf2");
                 boostHeatColor = Color.valueOf("e1f28c");
-                optionalBoostIntensity = 1f;
             }};
             beamBore = new ModifiedbeamDrill("beam-bore") {{
                 shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);

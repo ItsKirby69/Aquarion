@@ -125,7 +125,6 @@ public class AquaGenericCrafter extends AquaBlock {
         }
         stats.add(Stat.maxEfficiency, (int)(maxEfficiency * 100f), StatUnit.percent);
         if(boostersAffectOutput || boostAffectSpeedANDoutput) {
-            stats.remove(Stat.booster);
             if (itemBoostIntensity != 1){
                 ConsumeItems coni = findConsume(ConsumeItems.class);
                 if(coni != null){
