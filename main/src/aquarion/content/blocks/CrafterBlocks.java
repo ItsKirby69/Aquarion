@@ -447,7 +447,6 @@ public class CrafterBlocks {
                 liquidBoostIntensity = 3f;
                 heatColor = Color.valueOf("9d8cf2");
                 boostHeatColor = Color.valueOf("e1f28c");
-                optionalBoostIntensity = 1f;
             }};
             beamBore = new ModifiedbeamDrill("beam-bore") {{
                 requirements(Category.production, with(aluminum, 250, copper, 75, ferricMatter, 125));

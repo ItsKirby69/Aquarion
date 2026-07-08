@@ -297,20 +297,11 @@ public abstract class BaseProcessor extends AbstractProcessor{
     }
 
     public static String getDefault(String value){
-        switch(value){
-            case "float":
-            case "double":
-            case "int":
-            case "long":
-            case "short":
-            case "char":
-            case "byte":
-                return "0";
-            case "boolean":
-                return "false";
-            default:
-                return "null";
-        }
+        return switch (value) {
+            case "float", "double", "int", "long", "short", "char", "byte" -> "0";
+            case "boolean" -> "false";
+            default -> "null";
+        };
     }
 
     public boolean instanceOf(String type, String other){
@@ -324,36 +315,10 @@ public abstract class BaseProcessor extends AbstractProcessor{
                 || type.equals("long") || type.equals("float") || type.equals("double") || type.equals("char");
     }
 
-    public boolean isNumeric(TypeMirror type){
-        try{
-            switch(types.unboxedType(type).getKind()){
-                case BYTE:
-                case SHORT:
-                case INT:
-                case FLOAT:
-                case LONG:
-                case DOUBLE:
-                    return true;
-                default:
-                    return false;
-            }
-        }catch(IllegalArgumentException t){
-            return false;
-        }
-    }
-
     public boolean isNumeric(String type){
         return type.equals("byte") || type.equals("short") || type.equals("int") || type.equals("float")
                 || type.equals("long") || type.equals("double") || type.equals("Byte") || type.equals("Short")
                 || type.equals("Integer") || type.equals("Float") || type.equals("Long") || type.equals("Double");
-    }
-
-    public boolean isBool(TypeMirror type){
-        try{
-            return types.unboxedType(type).getKind() == BOOLEAN;
-        }catch(IllegalArgumentException t){
-            return false;
-        }
     }
 
     public boolean isBool(String type){
