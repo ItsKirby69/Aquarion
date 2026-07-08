@@ -1,4 +1,4 @@
-package aquarion.world.blocks;
+package aquarion.world.blocks.production;
 
 import aquarion.content.AquaLiquids;
 import mindustry.content.Items;
@@ -15,8 +15,8 @@ import aquarion.content.AquaItems;
 public class Filter extends Separator {
     public float outputLiquidAmount = 6.0f;
 
-    private final int[] itemChances = {29, 17, 17, 17, 17};
-    private final Item[] itemPool = {Items.sand, AquaItems.powdercopper, AquaItems.powderlead, AquaItems.powdersilicon, AquaItems.powdernickel};
+    private final int[] itemChances = {29, 17, 17, 17, 17}; //chance items
+    private final Item[] itemPool = {Items.sand, Items.copper, Items.lead, Items.silicon, AquaItems.nickel}; //items
 
     public Filter(String name) {
         super(name);
@@ -27,11 +27,11 @@ public class Filter extends Separator {
         outputsLiquid = true;
 
         results = new ItemStack[]{
-                new ItemStack(Items.sand, 10),
-                new ItemStack(AquaItems.powdercopper, 5),
-                new ItemStack(AquaItems.powderlead, 3),
-                new ItemStack(AquaItems.powdersilicon, 2),
-                new ItemStack(AquaItems.powdernickel, 2)
+                new ItemStack(Items.sand, 13),
+                new ItemStack(Items.copper, 12),
+                new ItemStack(Items.lead, 12),
+                new ItemStack(Items.silicon, 12),
+                new ItemStack(AquaItems.nickel, 12)
         };
     }
 

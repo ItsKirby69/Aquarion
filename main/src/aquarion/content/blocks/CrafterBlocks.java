@@ -5,6 +5,7 @@ import aquarion.content.AquaCategories;
 import aquarion.content.AquaItems;
 import aquarion.content.AquaSounds;
 import aquarion.world.blocks.heatBlocks.HotHeatConductor;
+import aquarion.world.blocks.production.Filter;
 import aquarion.world.blocks.production.ModifiedbeamDrill;
 import aquarion.world.consumers.ConsumeLiquidAcidic;
 import aquarion.world.drawers.*;
@@ -12,20 +13,16 @@ import aquarion.world.drawers.DrawBlockParts;
 import aquarion.world.entities.parts.NewRegPart;
 import aquarion.world.graphics.AquaFx;
 import aquarion.world.graphics.AquaPal;
-import aquarion.world.graphics.NewParticleEffect;
 import aquarion.world.type.AquaGenericCrafter;
 import aquarion.world.type.GroundDrill;
-import arc.Core;
 import arc.func.Cons;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.math.Interp;
-import arc.math.Mathf;
 import mindustry.content.*;
 import mindustry.ctype.UnlockableContent;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.ParticleEffect;
-import mindustry.entities.effect.RadialEffect;
 import mindustry.entities.effect.SeqEffect;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Layer;
@@ -44,7 +41,6 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
-import aquarion.world.blocks.*;
 
 import static aquarion.content.AquaAttributes.iron;
 import static aquarion.content.AquaAttributes.metamorphic;
@@ -54,7 +50,6 @@ import static aquarion.content.AquaPlanets.*;
 import static aquarion.world.graphics.Renderer.Layer.heat;
 import static aquarion.world.graphics.Renderer.Layer.shadow;
 import static arc.math.Interp.linear;
-import static arc.math.Interp.pow5Out;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.with;
@@ -1873,11 +1868,11 @@ public class CrafterBlocks {
 
             results = new ItemStack[]{
                     new ItemStack(Items.sand, 13),
-                    new ItemStack(AquaItems.powdercopper, 12),
-                    new ItemStack(AquaItems.powderlead, 12),
-                    new ItemStack(AquaItems.powdersilicon, 12),
-                    new ItemStack(AquaItems.powdernickel, 12)
-            };
+                    new ItemStack(Items.copper, 12),
+                    new ItemStack(Items.lead, 12),
+                    new ItemStack(Items.silicon, 12),
+                    new ItemStack(AquaItems.nickel, 12)
+            }; // items production
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
 
@@ -1892,39 +1887,6 @@ public class CrafterBlocks {
                     }},
 
                     new DrawDefault()
-            );
-        }};
-
-        powderoven = new powderoven("powder-oven") {{
-            requirements(Category.crafting, with(copper, 100, lead, 150, silicon, 200));
-
-            buildTime = 120f;
-            health = 800;
-            size = 4;
-            craftTime = 60f;
-            itemCapacity = 10;
-            liquidCapacity = 1f;
-
-            ambientSound = Sounds.loopSmelter;
-            ambientSoundVolume = 0.7f;
-
-            consumePower(2.5f);
-            consumeLiquid(Liquids.water, 0.08f).boost();
-
-            heatRequirement = 15f;
-            maxEfficiency = 1f;
-
-            addRecipe(powdercopper, 2, copper, 1);
-            addRecipe(powderlead, 2, lead, 1);
-            addRecipe(powdersilicon, 2, silicon, 1);
-            addRecipe(powdernickel, 2, nickel, 1);
-
-            drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawHeatInput(),
-                    new AquaHeatRegion("-heats") {{
-                        color = Color.valueOf("ff6060ff");
-                    }}
             );
         }};
     }

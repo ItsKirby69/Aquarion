@@ -175,22 +175,5 @@ public class AquaItems {
             biomass = true;
             flammability = 1;
         }};
-        powdersilicon = new Item("powder-silicon", Color.valueOf("#53565c")) {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            alwaysUnlocked = false;
-            buildable = false;
-        }};
-        powdercopper = new Item("powder-copper", Color.valueOf("#d99d73")) {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            buildable = false;
-        }};
-        powderlead = new Item("powder-lead", Color.valueOf("#8c7fa9")) {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            buildable = false;
-        }};
-        powdernickel = new Item("powder-nickel", Color.valueOf("#895841")) {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            buildable = false;
-        }};
     }
 }
