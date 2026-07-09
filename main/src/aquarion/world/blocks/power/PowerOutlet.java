@@ -133,30 +133,26 @@ public class PowerOutlet extends PowerGenerator {
                         front.consumers.remove(this);
                     }
                     if (front.producers.contains(this)) {
-                        BlockStatus status = fronte(front()) .status();
+                        BlockStatus status = fronte(front()).status();
                         int outlets = 0;
-                        for(Building p : front.producers){
-                            if(p instanceof OutletBuild o && o.fronte(o.front()) == frontBuild) outlets++;
+                        for (Building p : front.producers) {
+                            if (p instanceof OutletBuild o && o.fronte(o.front()) == frontBuild) outlets++;
                         }
-                        if(outlets < 1) outlets = 1;
-                        switch (status) {
-                            case active, noInput:
-                                need = Math.min(frontConsume.usage, powerProduction) / outlets;
-                                break;
-                            case logicDisable:
-                                need = 0;
-                                break;
-                            case noOutput:
-                                need = 0;
-                                break;
-                        }
-                        if (frontBuild.shouldConsume()) {
-                            need = Math.min(frontConsume.usage, powerProduction) / outlets;
-                        } else {
+                        if (outlets < 1) outlets = 1;
+                        
+                        if (!frontBuild.shouldConsume()) {
                             need = 0.1f / outlets;
-                        }
-                        if (!frontBuild.shouldConsumePower && !(frontBuild instanceof Turret.TurretBuild)) {
+                        } else if (!frontBuild.shouldConsumePower && !(frontBuild instanceof Turret.TurretBuild)) {
                             need = 0;
+                        } else {
+                            switch (status) {
+                                case active, noInput:
+                                    need = Math.min(frontConsume.usage, powerProduction * outlets) / outlets;
+                                    break;
+                                case logicDisable, noOutput:
+                                    need = 0;
+                                    break;
+                            }
                         }
                     } else {
                         front.producers.add(this);
