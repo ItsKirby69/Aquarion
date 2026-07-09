@@ -22,7 +22,6 @@ import mindustry.world.meta.StatUnit;
 import static mindustry.Vars.itemSize;
 import static mindustry.Vars.tilesize;
 
-//literally nothing special here unoriginal ass
 public class SealedRouter extends Router {
     public float speed = 8f;
     public TextureRegion topRegion;
