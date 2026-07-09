@@ -258,10 +258,18 @@ public class GroundDrill extends AquaBlock {
         } else {
             if(hasHeat) stats.add(Stat.booster, AquaStats.heatBooster(heatRequirement, overheatScale, baseEfficiency, maxEfficiency, flipHeatScale));
         }
-        if (itemBoostIntensity != 1 && findConsumer(f -> f instanceof ConsumeItems && f.booster) instanceof ConsumeItems coni) {
+        boolean hasItemBooster = itemBoostIntensity != 1 && findConsumer(f -> f instanceof ConsumeItems && f.booster) instanceof ConsumeItems;
+        boolean hasLiquidBooster = liquidBoostIntensity != 1 && findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase;
+        if(hasItemBooster || hasLiquidBooster){
+            stats.remove(Stat.booster);
+            if(hasHeat && baseEfficiency >= 1) stats.add(Stat.booster, AquaStats.heatBooster(heatRequirement, overheatScale, baseEfficiency, maxEfficiency, flipHeatScale));
+        }
+        if (hasItemBooster) {
+            ConsumeItems coni = (ConsumeItems)findConsumer(f -> f instanceof ConsumeItems && f.booster);
             stats.add(Stat.booster, AquaStats.itemBoosters("{0}" + StatUnit.timesSpeed.localized(), stats.timePeriod, itemBoostIntensity, 0f, coni.items, ItemBoostUseTime));
         }
-        if (liquidBoostIntensity != 1 && findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase consBase) {
+        if (hasLiquidBooster) {
+            ConsumeLiquidBase consBase = (ConsumeLiquidBase)findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster);
             stats.add(Stat.booster,
                     StatValues.speedBoosters("{0}" + StatUnit.timesSpeed.localized(),
                             consBase.amount,

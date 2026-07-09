@@ -132,13 +132,16 @@ public class PowerOutlet extends PowerGenerator {
                     if (front.consumers.contains(this)) {
                         front.consumers.remove(this);
                     }
-                    //Add production to current graph
                     if (front.producers.contains(this)) {
                         BlockStatus status = fronte(front()) .status();
-                        //TBH I could have just used an if/else but this was more fun
+                        int outlets = 0;
+                        for(Building p : front.producers){
+                            if(p instanceof OutletBuild o && o.fronte(o.front()) == frontBuild) outlets++;
+                        }
+                        if(outlets < 1) outlets = 1;
                         switch (status) {
                             case active, noInput:
-                                need = Math.min(frontConsume.usage, powerProduction);
+                                need = Math.min(frontConsume.usage, powerProduction) / outlets;
                                 break;
                             case logicDisable:
                                 need = 0;
@@ -148,10 +151,9 @@ public class PowerOutlet extends PowerGenerator {
                                 break;
                         }
                         if (frontBuild.shouldConsume()) {
-                            need = Math.min(frontConsume.usage, powerProduction);
+                            need = Math.min(frontConsume.usage, powerProduction) / outlets;
                         } else {
-                            //0.1f because if the turret had 0 power it would never try and target anything
-                            need = 0.1f;
+                            need = 0.1f / outlets;
                         }
                         if (!frontBuild.shouldConsumePower && !(frontBuild instanceof Turret.TurretBuild)) {
                             need = 0;
