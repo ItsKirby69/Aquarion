@@ -125,6 +125,9 @@ public class PowerOutlet extends PowerGenerator {
                 //Remove consumption from target graph.
                 if (lastFront != null && lastFront == frontBuild) {
                     PowerGraph front = frontBuild.power.graph;
+                    if(lastRotation != rotation){
+                        front.producers.remove(this);
+                    }
                     if(lastChange != Vars.world.tileChanges) {
                         lastChange = Vars.world.tileChanges;
                         front.reflow(front());
