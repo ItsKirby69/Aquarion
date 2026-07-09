@@ -48,7 +48,7 @@ abstract class FlyingDialogueUnitComp implements Unitc, FlyingDialogueUnitc{
     }
     @Override
     public void add(){
-        team.data().updateCount(type, 1);
+        //team.data().updateCount(type, 1);
 
         if(type instanceof DefunctUnitType t) say(random(t.spawnLines), 120f);
     }
