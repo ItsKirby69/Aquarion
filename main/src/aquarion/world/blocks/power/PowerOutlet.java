@@ -100,7 +100,11 @@ public class PowerOutlet extends PowerGenerator {
         public float lastRotation = 0;
         public @Nullable Building lastFront;
         public float lastChange = -2;
-
+        @Override
+        public void onRemoved(){
+            super.onRemoved();
+            if(lastFront != null && lastFront.power != null) lastFront.power.graph.producers.remove(this);
+        }
         @Override
         public void updateTile() {
             lastRotation = this.rotation;
