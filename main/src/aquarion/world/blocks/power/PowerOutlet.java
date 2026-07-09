@@ -141,7 +141,7 @@ public class PowerOutlet extends PowerGenerator {
                         if (outlets < 1) outlets = 1;
                         
                         if (!frontBuild.shouldConsume()) {
-                            need = 0.1f / outlets;
+                            need = 0.00001f / outlets;
                         } else if (!frontBuild.shouldConsumePower && !(frontBuild instanceof Turret.TurretBuild)) {
                             need = 0;
                         } else {

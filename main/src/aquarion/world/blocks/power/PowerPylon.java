@@ -81,6 +81,8 @@ public class PowerPylon extends PowerNode {
         super(name);
         configurable = false;
         consumesPower = false;
+        drawCached = false;
+        drawDynamic = true;
         insulated = true;
         outputsPower = false;
         canOverdrive = false;
