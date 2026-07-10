@@ -71,8 +71,13 @@ public class AquaResearchDialog extends BaseDialog {
     public static Vec2 v1 = new Vec2(), v2 = new Vec2(), v3 = new Vec2(), v4 = new Vec2(), offset = new Vec2(),
         v5 = new Vec2();
 
-    //The spacings between depth layers. Used to align layers.
+    /**The spacings between depth layers. Used to align layers.*/
     public IntFloatMap spacings = new IntFloatMap();
+
+    /**The radii of each depth layer. Used to align layers.*/
+    public IntFloatMap radii = new IntFloatMap();
+
+    public Seq<TechTreeNode> tmp1 = new Seq<>(), tmp2 = new Seq<>();
 
     public ItemSeq items;
 
@@ -314,80 +319,105 @@ public class AquaResearchDialog extends BaseDialog {
         treeLayout();
     }
 
-    int getSubtreeSize(TechTreeNode node){
-        if(node.children.length == 0) return 1;
+    /**First pass, gather the weights and depths of the nodes.*/
+    void precomputeTreeProperties(TechTreeNode node, int depth){
+        node.depth = depth - 1;
 
-        int sum = 0;
-        for(TechTreeNode child : node.children){
-            sum += getSubtreeSize(child);
+        node.weight = 0;
+        for(int i = 0; i < node.children.length; i++){
+            precomputeTreeProperties(node.children[i], depth + 1);
+            node.weight += node.children[i].weight;
         }
-        return sum;
+        if(node.weight < 1) node.weight = 1;
     }
 
-    void layoutRadialSmart(TechTreeNode node, float startAngle, float endAngle, int depth){
-        final float minimumNodeRadius = Mathf.dst(nodeSize,nodeSize) * 2f;
+    /**Second pass, find the slices and border angles of the nodes in each layer*/
+    void precomputeNodeSlices(TechTreeNode node){
+        node.leftBorderPos.set(1,0).rotate(node.startAngle).nor();
+        node.rightBorderPos.set(1,0).rotate(node.endAngle).nor();
 
-        node.leftBorderPos.set(1,0).rotate(startAngle).nor();
-        node.rightBorderPos.set(1,0).rotate(endAngle).nor();
-        node.depth = depth - 1;
-        if(node.children.length == 0) return;
-
-        int nodeCount = node.children.length;
-
-        float totalWeight = 0f;
-        float[] weights = new float[nodeCount];
-
-        for(int i = 0; i < nodeCount; i++){
-            weights[i] = getSubtreeSize(node.children[i]) + 2f;
-            totalWeight += weights[i];
-        }
-
-        float angleCursor = startAngle;
-
-        //find the smallest gap between members in this group of nodes. That angle will determine the radius.
-        float smallest = 360;
-        for(int i = 0; i < node.children.length; i++) {
-            int j = Mathf.mod(i - 1, node.children.length);
-            float angleWidth = (endAngle - startAngle) * (weights[i] / totalWeight) / 2 + (endAngle - startAngle) * (weights[j] / totalWeight) / 2;
-            if(smallest > angleWidth){
-                smallest = angleWidth;
-            }
-        }
-
-        //compute the radius
-        float lastRadius = computeRadiusAt(depth - 1);
-        float fitRadius = Math.max(minimumNodeRadius / (2 * Mathf.sinDeg(smallest)), lastRadius + minimumNodeRadius);
-        float spacing = fitRadius - lastRadius;
-        if(spacings.get(depth, 0) < spacing){
-            spacings.put(depth, spacing);
-        } else {
-            fitRadius = lastRadius + Math.max(spacings.get(depth, 0), minimumNodeRadius);
-        }
+        float angleCursor = node.startAngle;
 
         //compute node placement angles
         for(int i = 0; i < node.children.length; i++){
             TechTreeNode child = node.children[i];
-            float weightRatio = weights[i] / totalWeight;
-            float angleWidth = (endAngle - startAngle) * weightRatio;
-            float angle = angleCursor + angleWidth / 2f;
-            float rad = angle * Mathf.degreesToRadians;
+            float weightRatio = (float) child.weight / node.weight;
+            child.angleWidth = (node.endAngle - node.startAngle) * weightRatio;
+            float angle = angleCursor + child.angleWidth / 2f;
+            child.radAngle = angle * Mathf.degreesToRadians;
+            child.startAngle = angleCursor;
+            child.endAngle = child.startAngle + child.angleWidth;
 
-            child.x = Mathf.cos(rad);
-            child.y = Mathf.sin(rad);
+            precomputeNodeSlices(child);
 
-            layoutRadialSmart(child, angleCursor, angleCursor + angleWidth, depth + 1);
-
-            angleCursor += angleWidth;
+            angleCursor += child.angleWidth;
         }
 
-        //final pass, push nodes up to their chosen radii
+    }
+
+    /**Third pass, find the radius and spacings of the nodes in each layer*/
+    void precomputeSpacings(TechTreeNode root){
+        int maxDepth = getMaxDepth(root);
+        Seq<TechTreeNode> parents = tmp1;
+        Seq<TechTreeNode> children = tmp2;
+        Seq<TechTreeNode> temp = tmp2;
+        parents.clear();
+        parents.add(root);
+        children.clear();
+        for(int depth = 1; depth <= maxDepth; depth++){
+            precomputeSpacings(parents, depth);
+            for(int i = 0; i < parents.size; i++){
+                children.addAll(parents.get(i).children);
+            }
+
+            //swap lists
+            temp = parents;
+            parents = children;
+            children = temp;
+            children.clear();
+        }
+    }
+
+    void precomputeSpacings(Seq<TechTreeNode> parents, int depth){
+
+        final float minimumNodeRadius = Mathf.dst(nodeSize,nodeSize) * 2;
+
+        //find the smallest gap between members in this layer of nodes. That angle will determine the radius.
+        float smallest = 360;
+        for(int parentIndex = 0; parentIndex < parents.size; parentIndex++) {
+            TechTreeNode[] children = parents.get(parentIndex).children;
+            for (int i = 0; i < children.length; i++) {
+                int j = Mathf.mod(i - 1, children.length);
+                float angleWidth = (children[i].angleWidth / 2) + (children[j].angleWidth / 2);
+                if (smallest > angleWidth) {
+                    smallest = angleWidth;
+                }
+            }
+        }
+
+        //compute the radius for this layer
+        float lastRadius = computeRadiusAt(depth - 1);
+        float fitRadius = Math.max(minimumNodeRadius / (2 * Mathf.sinDeg(smallest)), lastRadius + minimumNodeRadius);
+        float spacing = fitRadius - lastRadius;
+        spacings.put(depth, spacing);
+        radii.put(depth, fitRadius);
+    }
+
+    /**Final pass, place nodes in the circle of their chosen radii.*/
+    void positionNodes(TechTreeNode node){
+
         for(int i = 0; i < node.children.length; i++){
             TechTreeNode child = node.children[i];
-
             float radius = computeRadiusAt(child.depth);
-            child.x *= radius;
-            child.y *= radius;
+
+            child.x = Mathf.cos(child.radAngle) * radius;
+            child.y = Mathf.sin(child.radAngle) * radius;
+            positionNodes(child);
         }
+    }
+
+    int getMaxDepth(TechTreeNode node){
+        return getMaxDepth(node, 0);
     }
 
     int getMaxDepth(TechTreeNode node, int depth){
@@ -399,19 +429,8 @@ public class AquaResearchDialog extends BaseDialog {
     }
     void treeLayout(){
 
-        int totalNodes = nodes.size;
-        float ringSpacing = Mathf.clamp(
-                120f + totalNodes * 3f,
-                250f,
-                900f
-        );
-
-        // Center root
-        root.x = 0f;
-        root.y = 0f;
-
         // Big brain moment here folks
-        layoutRadialSmart(root, 0f, 360f, 1);
+        layoutTreeRadial(root);
 
         // Recalculate bounds
         float minx = 0f, miny = 0f, maxx = 0f, maxy = 0f;
@@ -423,6 +442,30 @@ public class AquaResearchDialog extends BaseDialog {
             maxy = Math.max(n.y + n.height / 2f, maxy);
         }
         bounds = new Rect(minx, miny, maxx - minx, maxy - miny);
+    }
+
+    void layoutTreeRadial(TechTreeNode root){
+
+        spacings.clear();
+        radii.clear();
+
+        // Center root
+        root.x = 0f;
+        root.y = 0f;
+        root.startAngle = 0;
+        root.endAngle = 360;
+
+        //Prepare tree
+        precomputeTreeProperties(root, 1);
+
+        //Prepare borders and slices
+        precomputeNodeSlices(root);
+
+        //Get spacings given tree and slices
+        precomputeSpacings(root);
+
+        //Given spacings, position nodes
+        positionNodes(root);
     }
 
     void checkNodes(TechTreeNode node) {
@@ -450,12 +493,29 @@ public class AquaResearchDialog extends BaseDialog {
         public final TechNode node;
         public boolean visible = true, selectable = true;
 
-        //the angle of the leftmost border
+        /**The angle of the leftmost border.*/
         public Vec2 leftBorderPos;
 
-        //the angle of the rightmost border
+        /**The angle of the rightmost border*/
         public Vec2 rightBorderPos;
+
+        /**The depth of this node in the tree. This is also the number of parents above this node.*/
         public int depth = 0;
+
+        /**The weight of this node's subtree when divying up arcs.*/
+        public int weight = 1;
+
+        /**The angle of this node from the center of the tree in radians*/
+        float radAngle = 0;
+
+        /**The angle of one border of this node to the other*/
+        float angleWidth = 360;
+
+        /**The angle of the first border of this node from the center of the tree*/
+        float startAngle = 0;
+
+        /**The angle of second border of this node from the center of the tree*/
+        float endAngle = 360;
 
         public TechTreeNode(TechNode node, TechTreeNode parent) {
             this.node = node;
@@ -832,13 +892,7 @@ public class AquaResearchDialog extends BaseDialog {
             Draw.sort(true);
             float offsetX = panX + width / 2f, offsetY = panY + height / 2f;
             offset.set(offsetX, offsetY);
-            int maxDepth = getMaxDepth(root, 0);
-            int totalNodes = nodes.size;
-            float spacing = Mathf.clamp(
-                    120f + totalNodes * 3f,
-                    250f,
-                    900f
-            );
+            int maxDepth = getMaxDepth(root);
 
             Draw.z(0f);
 
@@ -887,7 +941,7 @@ public class AquaResearchDialog extends BaseDialog {
                     v4.set(node.rightBorderPos).scl(nodeSpacing).add(v3);
 
                     if(!locked(node.node)){
-                        Draw.color(Pal.accent);
+                        Draw.color(Pal.accentBack);
                         AquaFill.arcSlice(
                                 offset,
                                 measure,
@@ -937,7 +991,6 @@ public class AquaResearchDialog extends BaseDialog {
     }
 
     public float computeRadiusAt(int depth){
-        if(depth <= 0) return 0;
-        return computeRadiusAt(depth - 1) + spacings.get(depth,0);
+        return radii.get(depth, 0);
     }
 }
