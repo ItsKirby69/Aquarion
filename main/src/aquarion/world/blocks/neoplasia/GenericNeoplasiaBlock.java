@@ -26,6 +26,7 @@ import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.ConstructBlock;
 import mindustry.world.blocks.environment.Prop;
+import mindustry.world.meta.BuildVisibility;
 
 import static aquarion.world.blocks.neoplasia.NeoplasiaGraph.*;
 import static mindustry.Vars.tilesize;
@@ -87,6 +88,7 @@ public class GenericNeoplasiaBlock extends Block {
         drawTeamOverlay = false;
         hasItems = true;
         itemCapacity = 2;
+        buildVisibility = BuildVisibility.sandboxOnly;
     }
 
     public ItemStack getOutput() {

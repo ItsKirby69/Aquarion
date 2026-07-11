@@ -1,5 +1,7 @@
 package aquarion.world.blocks.defense;
 
+import aquarion.ui.ModSettings;
+import aquarion.world.Uti.AquaStatUnits;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
@@ -23,8 +25,10 @@ import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.consumers.Consume;
 import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.meta.*;
+import aquarion.world.Uti.AquaStats;
 
 import static mindustry.Vars.*;
+
 
 public class RegenPylon extends MendProjector {
     public final int timerUse;
@@ -51,7 +55,7 @@ public class RegenPylon extends MendProjector {
         reload = 300f;
         range = 60.0F;
         healAmount = 250F;
-        phaseBoost = 12.0F;
+        phaseBoost = 2F;
         phaseRangeBoost = 50.0F;
         useTime = 400.0F;
         solid = true;
@@ -76,13 +80,21 @@ public class RegenPylon extends MendProjector {
 
         stats.remove(Stat.repairTime);
         stats.remove(Stat.range);
-        stats.add(Stat.range, range / 8.0F, StatUnit.blocks);
+        stats.add(Stat.range, range/4f, StatUnit.blocks);
+        stats.add(AquaStats.healCD, reload/60f, StatUnit.seconds);
+        stats.add(AquaStats.rawHeal, healAmount, AquaStatUnits.health);
+        if(ModSettings.getEvilMenderStats()) {
+            stats.add(AquaStats.lightningInaccuracy, lightningIncaccuracy, StatUnit.degrees);
+            stats.add(AquaStats.lightningReload, lightningReload / 60f, StatUnit.seconds);
+            stats.add(AquaStats.lightningCount, lightnings);
+            stats.add(AquaStats.lightningDamage, lightningDamage);
+        }
 
         Consume var2 = this.findConsumer((c) -> c instanceof ConsumeItems);
         if (var2 instanceof ConsumeItems) {
             ConsumeItems cons = (ConsumeItems)var2;
             this.stats.remove(Stat.booster);
-            this.stats.add(Stat.booster, StatValues.itemBoosters("{0}" + StatUnit.timesSpeed.localized(), stats.timePeriod, (this.phaseBoost * this.healAmount), this.phaseRangeBoost, cons.items));
+            this.stats.add(Stat.booster, StatValues.itemBoosters("{0}" + StatUnit.timesSpeed.localized(), stats.timePeriod, (this.phaseBoost), this.phaseRangeBoost, cons.items));
         }
 
     }
@@ -139,7 +151,7 @@ public class RegenPylon extends MendProjector {
                 this.consume();
             }
 
-            if(enemyClose && this.timer(zapTimer, lightningReload)){
+            if(enemyClose && this.timer(zapTimer, lightningReload/efficiency)){
                 Units.nearbyEnemies(team, x, y, range * 2, u -> {
                     if(u.dead || !u.isValid()) return;
                     for(int i = 1; i <= lightnings; i++) {
@@ -155,7 +167,7 @@ public class RegenPylon extends MendProjector {
                 });
             }
 
-            if(this.charge >= RegenPylon.this.reload && canHeal){
+            if(this.charge >= RegenPylon.this.reload / (Math.max(1, this.phaseHeat * phaseBoost)) && canHeal){
                 float realRange = RegenPylon.this.range / 2f
                         + this.phaseHeat * RegenPylon.this.phaseRangeBoost;
 
@@ -167,7 +179,7 @@ public class RegenPylon extends MendProjector {
                         b -> b.damaged() && !b.isHealSuppressed(),
                         other -> {
                             other.heal(
-                                     healAmount * phaseBoost * efficiency
+                                    (healAmount) * efficiency
                             );
                             other.recentlyHealed();
                             Fx.healBlockFull.at(

@@ -44,9 +44,16 @@ public class rokBlock extends Block {
         }
 
     }
-    @Override
-    public Color getColor(Tile tile){
-        int mc = minimapColor(tile);
-        return Tmp.c3.set(mc);
+    public class rokBlockBuild extends Building {
+        //prevents the tree from breaking during wave shockwave
+        //shamelessly stolen from Minedustry
+        //i did this after flora, so it was very fast
+        @Override
+        public void damage(float amount){
+            if(amount >= 1e7f){
+                return;
+            }
+            super.damage(amount);
+        }
     }
 }

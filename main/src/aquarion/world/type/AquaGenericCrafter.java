@@ -80,7 +80,7 @@ public class AquaGenericCrafter extends AquaBlock implements AquaBarHelpers.Cust
     /**Maximum possible efficiency after overheat.*/
     public float maxEfficiency = 1f;
     /** Base heat efficiency*/
-    public float baseEfficiency = 1;
+    public float baseEfficiency = 1f;
     /**if you go below the heat req eff goes up*/
     public boolean flipHeatScale = false;
     /** Boost intensities for respective item and liquid boosters*/
@@ -125,7 +125,7 @@ public class AquaGenericCrafter extends AquaBlock implements AquaBarHelpers.Cust
                 ));
             }
         }
-        stats.add(Stat.maxEfficiency, (int)(maxEfficiency * 100f), StatUnit.percent);
+        stats.add(Stat.maxEfficiency, (int)((maxEfficiency + baseEfficiency) * 100f), StatUnit.percent);
         if(boostersAffectOutput || boostAffectSpeedANDoutput) {
             // The dedicated output-multiplier bundles added below supersede the generic
             // per-consumer booster entries added by AquaBlock.setStats() (which would
@@ -134,7 +134,7 @@ public class AquaGenericCrafter extends AquaBlock implements AquaBarHelpers.Cust
             stats.remove(Stat.booster);
             if(hasHeat && baseEfficiency > 0){
                 stats.add(Stat.booster, AquaStats.heatBooster(
-                        heatRequirement, overheatScale, baseEfficiency, maxEfficiency, flipHeatScale
+                        heatRequirement, overheatScale, baseEfficiency, maxEfficiency + baseEfficiency, flipHeatScale
                 ));
             }
             if (itemBoostIntensity != 1){

@@ -178,7 +178,6 @@ public class DefenseBlocks {
             requirements(Category.defense, with(bauxite, 24));
             health = 1000;
             size = 2;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.bauxiteDestroy);
@@ -192,37 +191,29 @@ public class DefenseBlocks {
             envDisabled = Env.none;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.bauxiteDestroy);
 
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-
         }};
         zincWall = new AquaWall("zinc-wall") {{
             requirements(Category.defense, with(zinc, 24));
             health = 1200;
             size = 2;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.zincDestroy);
-
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.zincDestroy);
         }};
         hugeZincWall = new AquaWall("huge-zinc-wall") {{
             requirements(Category.defense, with(zinc, 54));
             health = 2450;
             size = 3;
             envEnabled |= Env.terrestrial | Env.underwater;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.zincDestroy);
-
             envDisabled = Env.none;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.zincDestroy);
         }};
         bauxiteBarricade = new AquaWall("bauxite-barricade") {{
             requirements(Category.defense, with(bauxite, 500, metaglass, 200, silicon, 600, copper, 250));
-            size = 5;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            health = (int) (6250 * 0.75f);
+            health = 8620;
             armor = 12;
+            size = 5;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.bauxiteDestroy);
-
             destroyBulletSameTeam = true;
             destroyBullet = new EmptyBulletType() {{
                 fragBullets = 24;
@@ -249,154 +240,149 @@ public class DefenseBlocks {
         }};
         nickelWall = new AquaWall("nickel-wall") {{
             requirements(Category.defense, with(nickel, 24));
+            alwaysUnlocked = true;
             health = 290 * 4;
             size = 2;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.nickelDestroy);
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            alwaysUnlocked = true;
-            researchCostMultiplier = 0.1f;
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.nickelDestroy);
+            researchCostMultiplier = 0.1f;
         }};
         hugeNickelWall = new AquaWall("huge-nickel-wall") {{
             requirements(Category.defense, with(nickel, 54));
+            alwaysUnlocked = true;
             health = 290 * 9;
             size = 3;
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.nickelDestroy);
-            alwaysUnlocked = true;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             researchCostMultiplier = 0.25f;
         }};
         cupronickelWall = new AquaWall("cupronickel-wall") {{
             requirements(Category.defense, with(cupronickel, 24));
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.cuproDestroy);
-
             health = 450 * 4;
+            armor = 5;
             size = 2;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            researchCostMultiplier = 0.1f;
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.cuproDestroy);
+            researchCostMultiplier = 0.1f;
         }};
         hugeCupronickelWall = new AquaWall("huge-cupronickel-wall") {{
             requirements(Category.defense, with(cupronickel, 54));
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.cuproDestroy);
-
             health = 450 * 9;
+            armor = 5;
             size = 3;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.cuproDestroy);
             researchCostMultiplier = 0.25f;
         }};
         nickelBarricade = new AquaWall("nickel-barricade") {{
             requirements(Category.defense, with(nickel, 400, silicon, 750, metaglass, 300));
-            size = 5;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             health = 500 * 25;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.nickelDestroy);
-
             armor = 15;
+            size = 5;
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.nickelDestroy);
             researchCostMultiplier = 0.5f;
         }};
         aluminumWall = new AquaWall("aluminum-wall") {{
             requirements(Category.defense, with(aluminum, 24));
-            health = 2400;
+            health = 600 * 4;
+            armor = 4;
             size = 2;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-
             envEnabled |= Env.terrestrial | Env.underwater;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.aluminumDestroy);
-
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.aluminumDestroy);
             researchCostMultiplier = 0.25f;
         }};
         hugeAluminumWall = new AquaWall("huge-aluminum-wall") {{
             requirements(Category.defense, with(aluminum, 54));
-            health = 5400;
+            health = 600 * 9;
+            armor = 4;
             size = 3;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.aluminumDestroy);
-
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
             researchCostMultiplier = 0.25f;
         }};
         polymerWall = new AquaWall("polymer-wall") {{
             requirements(Category.defense, with(polymer, 24));
+            insulated = true;
+            absorbLasers = true;
             health = 200 * 4;
+            armor = 6;
             size = 2;
             flammabilityScale = 2;
-            insulated = true;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.polymerDestroy);
-
             chanceDeflect = 0.1f;
-            absorbLasers = true;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            researchCostMultiplier = 0.1f;
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.polymerDestroy);
+            researchCostMultiplier = 0.1f;
         }};
         hugePolymerWall = new AquaWall("huge-polymer-wall") {{
             requirements(Category.defense, with(polymer, 54));
-            health = 200 * 9;
-            size = 3;
-            absorbLasers = true;
-            flammabilityScale = 2;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.polymerDestroy);
-
             insulated = true;
+            absorbLasers = true;
+            health = 200 * 9;
+            armor = 6;
+            size = 3;
+            flammabilityScale = 2;
             chanceDeflect = 0.1f;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.polymerDestroy);
             researchCostMultiplier = 0.25f;
         }};
         steelWall = new AquaWall("steel-wall") {{
             requirements(Category.defense, with(steel, 24));
-            health = 400 * 4;
+            health = 1000 * 4;
+            armor = 12;
             size = 2;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.steelDestroy);
-
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            researchCostMultiplier = 0.1f;
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.steelDestroy);
+            researchCostMultiplier = 0.1f;
         }};
         hugeSteelWall = new AquaWall("huge-steel-wall") {{
             requirements(Category.defense, with(steel, 54));
-            health = 400 * 9;
+            health = 1000 * 9;
+            armor = 12;
             size = 3;
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.steelDestroy);
-
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             researchCostMultiplier = 0.25f;
         }};
         ferrosilconWall = new AquaWall("ferrosilicon-wall") {{
             requirements(Category.defense, with(ferrosilicon, 24));
-            health = 3200;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.ferroDestroy);
-
+            health = 800 * 4;
+            armor = 8;
             size = 2;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.ferroDestroy);
             researchCostMultiplier = 0.25f;
         }};
         hugeFerrosiliconWall = new AquaWall("huge-ferrosilicon-wall") {{
             requirements(Category.defense, with(ferrosilicon, 54));
-            health = 7200;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.ferroDestroy);
-
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-
+            health = 800 * 9;
+            armor = 8;
             size = 3;
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.ferroDestroy);
             researchCostMultiplier = 0.25f;
         }};
         chalkalloyWall = new Wall("chalkalloy-wall"){{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.defense, with(chalkalloy, 6));
             health = 110 * 4;
         }};
         chalkalloyWallLarge = new Wall("chalkalloy-wall-large"){{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.defense, ItemStack.mult(chalkalloyWall.requirements, 4));
             health = 110 * 4 * 4;
             size = 2;

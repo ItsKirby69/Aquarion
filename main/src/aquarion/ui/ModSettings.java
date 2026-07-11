@@ -19,11 +19,14 @@ public class ModSettings {
         if (initialized) return;
         initialized = true;
 
-        Vars.ui.settings.addCategory("Aquarion", root -> {
+        Vars.ui.settings.addCategory("Aquarion", "aquarion-settings-icon", root -> {
+            root.checkPref("floraFade", true);
+            root.sliderPref("floraFadePercent", 50,0,100,5,s -> s + "%");
+            root.checkPref("evilMenderStats", true);
             root.checkPref("onlyModMus", false);
             root.checkPref("betterland", false);
             root.checkPref("betterfine", false);
-            root.checkPref("richPrescense", true);
+            root.checkPref("richPresence", true);
             root.checkPref("showUpdates", true);
             root.checkPref("debugResearchRendering", false);
             root.checkPref("debugHitboxRendering", false);
@@ -90,6 +93,18 @@ public class ModSettings {
         });
     }
 
+    public static boolean getFloraFade(){
+        return Core.settings.getBool("floraFade", true);
+    }
+
+    public static int getFloraFadePercent(){
+        return Core.settings.getInt("floraFadePercent", 50);
+    }
+
+    public static boolean getEvilMenderStats(){
+        return Core.settings.getBool("evilMenderStats", true);
+    }
+
     public static boolean getOnlyModMus(){
         return Core.settings.getBool("onlyModMus", false);
     }
@@ -103,12 +118,10 @@ public class ModSettings {
     }
 
     public static boolean getRichPresence(){
-        return Core.settings.getBool("richPrescense", true);
+        return Core.settings.getBool("richPresence", true);
     }
 
-    public static boolean getShowUpdates(){
-        return Core.settings.getBool("showUpdates", true);
-    }
+    public static boolean getShowUpdates(){return Core.settings.getBool("showUpdates", true);}
 
     public static boolean getDebugResearchRendering(){
         return Core.settings.getBool("debugResearchRendering", false);

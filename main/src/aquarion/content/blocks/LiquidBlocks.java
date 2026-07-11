@@ -23,12 +23,12 @@ public class LiquidBlocks {
     public static Block blastPump, siphonUnderflow, pipeTank,siphonGullet, siphonReservoir, siphonVessel, pipe, pipeBridge, electrumPump, pulseSiphonBridge, pulseSiphon, siphonBridge, siphonJunction, siphonRouter, siphon;
 
     public static void loadContent() {
+        Liquids.oil.explosiveness = 0.7f;
         siphonBridge = new ModifiedLiquidBridge("siphon-bridge") {{
             requirements(Category.liquid, with(silicon, 35));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             fadeIn = false;
             range = 4;
-            willMelt = false;
+            willMelt = true;
             hasPower = false;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
             health = 110;
@@ -39,8 +39,7 @@ public class LiquidBlocks {
         }};
         pulseSiphonBridge = new ModifiedLiquidBridge("pulse-siphon-bridge") {{
             requirements(Category.liquid, with(polymer, 30));
-            willMelt = true;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
+            willMelt = false;
             range = 6;
             hasPower = false;
             envEnabled |= Env.terrestrial | Env.underwater;
@@ -56,7 +55,6 @@ public class LiquidBlocks {
         }};
         siphon = new ModifiedConduit("siphon") {{
             requirements(Category.liquid, with(silicon, 3));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             willMelt = true;
             junctionReplacement = siphonJunction;
             bridgeReplacement = siphonBridge;
@@ -72,7 +70,6 @@ public class LiquidBlocks {
         pulseSiphon = new ModifiedConduit("pulse-siphon") {{
             //but what if siligone? SOLVEDDD!
             requirements(Category.liquid, with(polymer, 2, aluminum, 4));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             junctionReplacement = siphonJunction;
             bridgeReplacement = pulseSiphonBridge;
             liquidCapacity = 120;
@@ -88,35 +85,19 @@ public class LiquidBlocks {
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
             liquidCapacity = 80;
             envDisabled = Env.none;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             alwaysUnlocked = true;
             willMelt = true;
         }};
         siphonJunction = new ModifiedLiquidJunction("siphon-junction") {{
             requirements(Category.liquid, with(silicon, 70));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
             health = 110;
             ((ModifiedConduit) siphon).junctionReplacement = this;
         }};
-        Liquids.oil.explosiveness = 0.7f;
-        pipeTank = new ModifiedLiquidRouter("siphon-tank") {{
-            requirements(Category.liquid, with(silicon, 600, metaglass, 500));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            liquidPadding = 3;
-            squareSprite = false;
-            liquidCapacity = 8000;
-            size = 3;
-            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
-            willMelt = true;
-            envEnabled |= Env.terrestrial | Env.underwater;
-            envDisabled = Env.none;
-        }};
         siphonVessel = new ModifiedLiquidRouter("siphon-vessel") {{
             requirements(Category.liquid, with(silicon, 150, metaglass, 50));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             liquidPadding = 2;
             squareSprite = false;
             liquidCapacity = 4000;
@@ -126,13 +107,23 @@ public class LiquidBlocks {
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
         }};
+        pipeTank = new ModifiedLiquidRouter("siphon-tank") {{
+            requirements(Category.liquid, with(silicon, 600, metaglass, 500));
+            liquidPadding = 3;
+            squareSprite = false;
+            liquidCapacity = 10000;
+            size = 3;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
+            willMelt = true;
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
+        }};
         siphonGullet = new ModifiedLiquidRouter("siphon-gulley"){{
             requirements(Category.liquid, with(silicon, 2000, metaglass, 1500));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             liquidPadding = 2;
             squareSprite = false;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.siphonDestroy);
-            liquidCapacity = 40000;
+            liquidCapacity = 45000;
             size = 6;
             willMelt = true;
             envEnabled |= Env.terrestrial | Env.underwater;
@@ -140,10 +131,9 @@ public class LiquidBlocks {
         }};
         siphonReservoir = new ModifiedLiquidRouter("siphon-reservoir") {{
             requirements(Category.liquid, with(aluminum, 50, polymer, 250));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             liquidPadding = 3;
             squareSprite = false;
-            liquidCapacity = 18000;
+            liquidCapacity = 32000;
             size = 4;
             willMelt = false;
             envEnabled |= Env.terrestrial | Env.underwater;
@@ -155,6 +145,7 @@ public class LiquidBlocks {
             liquidCapacity = 100;
         }};
         blastPump = new Pump("blast-pump"){{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.liquid, with(silicon, 7000, chalkalloy, 50));
             pumpAmount = 0.33f;
             consumePower(4f);

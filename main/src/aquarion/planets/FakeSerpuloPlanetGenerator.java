@@ -435,7 +435,7 @@ public class FakeSerpuloPlanetGenerator extends PlanetGenerator{
                     floor = spore ?
                             (deep ? Blocks.taintedWater : Blocks.darksandTaintedWater) :
                             (deep ? Blocks.water :
-                                    (floor == Blocks.sand || floor == Blocks.salt ? Blocks.sandWater : Blocks.darksandWater));
+                             (floor == Blocks.sand || floor == Blocks.salt ? Blocks.sandWater : Blocks.darksandWater));
                 }
             }
         });

@@ -10,9 +10,9 @@ public class AquaSectorPresets {
     public static SectorPreset  //tantros
     Ingress, diseasedCleft, brinePlateau, FeldsparRavine, Torrent, CrystalCaverns, Grove, Ecotone, SubmergedCanyon, GalenaFringe, ripHold, verdantShallows,
     //serpulo (fake)
-    resurgence, twinPass, dryRiver, blastedDockyards, coupledBasin, frigidShores, floodPlains, bay, lowlandStrait, mountainsideComplex,  erodedCanyon, searedWastes, fungalTropics, violetValley, frozenLake, stormyCoast,
+    resurgence, twinPass, dryRiver, blastedDockyards, coupledBasin, frigidShores, floodPlains, bay, lowlandStrait, mountainsideComplex,  erodedCanyon, searedWastes, fungalTropics, violetValley, frozenLake, stormyCoast, icyRiver,
     //Delubrum
-    lib;
+    lib, ruinedRepository;
     public static void load(){
         resurgence = new SectorPreset("resurgence", fakeSerpulo, 112){{
             allDatabaseTabs = true;
@@ -26,6 +26,9 @@ public class AquaSectorPresets {
         }};
 
         lib = new SectorPreset("lakesideLibrary", AquaPlanets.delubrum,1){{
+        }};
+        ruinedRepository = new SectorPreset("ruined-repository", AquaPlanets.delubrum,0){{
+            overrideLaunchDefaults = true;
         }};
         frigidShores = new SectorPreset("frigidShores", fakeSerpulo, 467){{
             allDatabaseTabs = true;
@@ -56,14 +59,22 @@ public class AquaSectorPresets {
         twinPass = new SectorPreset("twinPass", fakeSerpulo, 597){{
             allDatabaseTabs = true;
             addStartingItems = true;
-            captureWave = 25;
+            captureWave = 20;
             alwaysUnlocked = false;
             difficulty = 4;
             showSectorLandInfo = false;
             overrideLaunchDefaults = true;
-            startWaveTimeMultiplier = 3f;
         }};
-        floodPlains = new SectorPreset("floodPlains", fakeSerpulo, 596){{
+        icyRiver = new SectorPreset("icy-river", fakeSerpulo, 596){{
+            allDatabaseTabs = true;
+            addStartingItems = true;
+            captureWave = 15;
+            alwaysUnlocked = false;
+            difficulty = 4;
+            showSectorLandInfo = false;
+            overrideLaunchDefaults = true;
+        }};
+        floodPlains = new SectorPreset("floodPlains", fakeSerpulo, 349){{
             allDatabaseTabs = true;
             addStartingItems = true;
             captureWave = 17;
@@ -73,7 +84,7 @@ public class AquaSectorPresets {
             alwaysUnlocked = false;
             startWaveTimeMultiplier = 4f;
         }};
-        bay = new SectorPreset("Lagoon", fakeSerpulo, 349){{
+        bay = new SectorPreset("Lagoon", fakeSerpulo, 14){{
             allDatabaseTabs = true;
             addStartingItems = true;
             captureWave = 21;
@@ -204,7 +215,7 @@ public class AquaSectorPresets {
             allDatabaseTabs = true;
             addStartingItems = true;
             captureWave = 17;
-            difficulty = 6;
+            difficulty = 3;
             showSectorLandInfo = false;
             overrideLaunchDefaults = true;
             startWaveTimeMultiplier = 3;
@@ -214,7 +225,7 @@ public class AquaSectorPresets {
             allDatabaseTabs = true;
             addStartingItems = true;
             captureWave = 17;
-            difficulty = 6;
+            difficulty = 7;
             showSectorLandInfo = false;
             overrideLaunchDefaults = true;
             startWaveTimeMultiplier = 3;
@@ -223,7 +234,7 @@ public class AquaSectorPresets {
             allDatabaseTabs = true;
             addStartingItems = true;
             captureWave = 11;
-            difficulty = 6;
+            difficulty = 3;
             showSectorLandInfo = false;
             overrideLaunchDefaults = true;
             startWaveTimeMultiplier = 3;
@@ -232,7 +243,7 @@ public class AquaSectorPresets {
             allDatabaseTabs = true;
             addStartingItems = true;
             captureWave = 31;
-            difficulty = 8;
+            difficulty = 5;
             showSectorLandInfo = false;
             overrideLaunchDefaults = true;
             startWaveTimeMultiplier = 3;
@@ -255,7 +266,7 @@ public class AquaSectorPresets {
             overrideLaunchDefaults = true;
             startWaveTimeMultiplier = 3;
         }};
-        verdantShallows = new SectorPreset("verdant-shallows", tantros2, 86){{
+        verdantShallows = new SectorPreset("verdant-shallows", tantros2, 22){{
             allDatabaseTabs = true;
             addStartingItems = true;
             captureWave = 26;

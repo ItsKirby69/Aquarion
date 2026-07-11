@@ -115,7 +115,6 @@ public class TurretBlocks {
             requirements(Category.turret, with(AquaItems.brass, 10, silicon, 90, copper, 150));
             health = 300;
             range = 80;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             squareSprite = false;
             outlineColor = tantDarkestTone;
             destroyEffect = new MultiEffect(AquaFx.factoryDestroy, Fx.dynamicExplosion);
@@ -730,7 +729,6 @@ public class TurretBlocks {
         sentry = new ItemPointDefenseTurret("sentry") {{
             requirements(Category.turret, with(metaglass, 85, copper, 60f, silicon, 80, graphite, 90));
             shootCone = 20;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             outlineColor = tantDarkestTone;
             size = 2;
             squareSprite = false;
@@ -1286,7 +1284,6 @@ public class TurretBlocks {
         };
         refraction = new ContinuousTurret("refraction") {{
             requirements(Category.turret, with(metaglass, 90, copper, 120, lead, 100, graphite, 120));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             size = 2;
             shootType = new PointLaserBulletType() {{
                 damage = 240 / 6f;
@@ -1325,7 +1322,6 @@ public class TurretBlocks {
         }};
         douse = new LiquidTurret("douse") {{
             requirements(Category.turret, with(metaglass, 90, nickel, 60, copper, 20, graphite, 25));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             size = 2;
             liquidCapacity = 90;
             ammoPerShot = 4;
@@ -1571,7 +1567,6 @@ public class TurretBlocks {
             limitRange(1.1f);
         }};
         confront = new AquaTemplates.AquaItemTurretTemplate("confront") {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             health = 1125;
             requirements(Category.turret, with(brass, 250, graphite, 150, AquaItems.ferricMatter, 300));
 
@@ -1595,7 +1590,7 @@ public class TurretBlocks {
                         width = 10f;
                         height = 16f;
                         trailLength = 12;
-                        lifetime = 40f;
+                        lifetime = 50f;
                         ammoMultiplier = 1;
                         shootEffect = AquaFx.shootLong;
                         smokeEffect = Fx.smoke;
@@ -2041,6 +2036,7 @@ public class TurretBlocks {
             }};
         }};
         ensign = new ItemTurret("ensign") {{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.turret, with(lead, 45, silicon, 60, chalkalloy, 20));
             size = 2;
             reload = 70;
@@ -2203,6 +2199,7 @@ public class TurretBlocks {
 
         }};
         hack = new ItemTurret("hack") {{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             ammo(
                     chalkalloy, new BasicBulletType(3, 9) {{
                         frontColor = Color.white;
@@ -2265,6 +2262,7 @@ public class TurretBlocks {
             }});
         }};
         blaze = new PowerTurret("blaze") {{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.turret, with(graphite, 35, lead, 40));
             consumePower(128 / 60f);
             size = 2;
@@ -2305,6 +2303,7 @@ public class TurretBlocks {
 
         }};
         clobber = new ItemTurret("clobber"){{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.turret, with(copper, 120, lead, 90, graphite, 60));
             size = 2;
             ammoPerShot = 2;
@@ -2364,6 +2363,7 @@ public class TurretBlocks {
             }};
         }};
         mayhem = new LiquidTurret("mayhem"){{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.turret, with(copper, 90, metaglass, 60, silicon, 45));
             loopSound = Sounds.loopFire;
             size = 2;
@@ -2433,6 +2433,7 @@ public class TurretBlocks {
             }};
         }};
         illustrate = new ItemTurret("illustrate"){{
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.turret, with(silicon, 120, chalkalloy, 110, graphite, 80, lead, 100));
             reload = 15;
             shoot = new ShootAlternate(6);
@@ -2447,7 +2448,7 @@ public class TurretBlocks {
             scaledHealth = 250;
             consumeCoolant(0.3f);
             inaccuracy = 12;
-            shootSound = shootFuse;
+            shootSound = shootSalvo;
             soundPitchMax = 0.6f;
             soundPitchMin = 0.4f;
             ammo(
@@ -2461,24 +2462,82 @@ public class TurretBlocks {
                         fragVelocityMax = 1.1f;
                         fragVelocityMin = 1;
                         fragBullets = 4;
-                        fragBullet = new BasicBulletType(4, 30){{
+                        ammoMultiplier = 4;
+                        fragBullet = new BasicBulletType(5, 25){{
+                            trailEffect = Fx.disperseTrail;
+                            trailInterval = 4f;
+                            trailWidth = 1.5f;
+                            trailLength = 6;
+                            trailColor = Color.white;
+                            trailRotation = true;
+                            rotationOffset = 90f;
+                            sprite = "large-bomb-back";
                             width = height = 6;
                             velocityRnd = 0.1f;
-                            lifetime = 80;
+                            lifetime = 56;
                             splashDamage = 25;
                             splashDamageRadius = 16;
                             frontColor = Color.white;
                             backColor = hitColor = lightColor = Pal.gray;
                             collidesGround = false;
-                            ammoMultiplier = 5;
                         }};
                     }},
-                    cupronickel, new BasicBulletType(2.5f, 80){{
-                        width = height = 6;
-                        frontColor = Color.white;
+                    AquaItems.ferricMatter, new EmptyBulletType(){{
+                        instantDisappear = true;
+                        fragOffsetMin = 0;
+                        fragOffsetMax = 0;
+                        fragRandomSpread = 5f;
+                        fragLifeMin = 1;
+                        fragLifeMax = 1;
+                        fragVelocityMax = 1.1f;
+                        fragVelocityMin = 1;
+                        fragBullets = 2;
+                        ammoMultiplier = 6;
+                        fragBullet = new BasicBulletType(10f, 70){
+                            {
+                                trailEffect = Fx.disperseTrail;
+                                trailInterval = 2f;
+                                trailWidth = 1.1f;
+                                trailLength = 6;
+                                trailColor = frontColor = AquaPal.ferricMatter;
+                                trailRotation = true;
+                                rotationOffset = 90f;
+                                sprite = "large-bomb-back";
+                                width = height = 8;
+                                velocityRnd = 0.2f;
+                                lifetime = 28;
+                                backColor = hitColor = lightColor = AquaPal.cupronickel;
+                                collidesGround = false;
+                            }};
+                    }},
+                    plastanium, new EmptyBulletType(){{
+                        instantDisappear = true;
+                        fragOffsetMin = 0;
+                        fragOffsetMax = 0;
+                        fragRandomSpread = 15f;
+                        fragLifeMin = 1;
+                        fragLifeMax = 1;
+                        fragVelocityMax = 1.1f;
+                        fragVelocityMin = 1;
+                        fragBullets = 5;
                         ammoMultiplier = 3;
-                        backColor = hitColor = lightColor = Pal.gray;
-                        collidesGround = false;
+                        fragBullet = new BasicBulletType(6, 30){{
+                            trailEffect = Fx.disperseTrail;
+                            trailInterval = 2f;
+                            trailWidth = 1f;
+                            trailLength = 6;
+                            trailColor = frontColor = Pal.berylShot;
+                            trailRotation = true;
+                            rotationOffset = 90f;
+                            sprite = "large-bomb-back";
+                            width = height = 6;
+                            velocityRnd = 0.1f;
+                            lifetime = 47;
+                            splashDamage = 45;
+                            splashDamageRadius = 24;
+                            backColor = hitColor = lightColor = Pal.plastanium;
+                            collidesGround = false;
+                        }};
                     }}
             );
             drawer = new DrawTurret(){{
@@ -2495,26 +2554,24 @@ public class TurretBlocks {
             }};
         }};
         maelstrom = new LiquidTurret("maelstrom") {{
+            shoot.firstShotDelay = 20f;
             shoot.shotDelay = 2;
             shoot.shots = 5;
             ammoPerShot = 2;
             inaccuracy = 25;
             extinguish = false;
             liquidCapacity = 200;
-            reload = 2;
             outlineColor = tantDarkestTone;
             loopSound = Sounds.loopBio;
             loopSoundVolume = 0.09f;
-            shoot.firstShotDelay = 20;
-            warmupMaintainTime = 50;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
-            shootWarmupSpeed = 0.07f;
-            minWarmup = 0.85f;
             range = 260;
             size = 3;
             squareSprite = false;
             shootSound = shootSap;
             targetGround = false;
+            warmupMaintainTime = 50;
+            shootWarmupSpeed = 0.07f;
+            minWarmup = 0.85f;
             requirements(Category.turret, with(AquaItems.brass, 250, copper, 100));
             ammo(
                     fumes, new MissileBulletType(7, 10) {{

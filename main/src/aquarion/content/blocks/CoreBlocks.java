@@ -35,6 +35,7 @@ import mindustry.world.blocks.environment.OverlayFloor;
 import mindustry.world.blocks.logic.MessageBlock;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
+import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 
 import static aquarion.content.AquaItems.*;
@@ -91,7 +92,6 @@ public class CoreBlocks {
             requirements(Category.effect, with(aluminum, 160, silicon, 150, ferricMatter, 300));
             itemCapacity = 900;
             coreMerge = true;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             squareSprite = false;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.factoryDestroy);
             size = 3;
@@ -105,7 +105,6 @@ public class CoreBlocks {
             itemCapacity = 150;
             coreMerge = false;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.factoryDestroy);
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             squareSprite = false;
             size = 2;
             researchCostMultiplier = 0.02f;
@@ -117,11 +116,10 @@ public class CoreBlocks {
             requirements(Category.effect, with(silicon, 1500));
             squareSprite = false;
             health = 2500;
-            itemCapacity = 8000;
+            itemCapacity = 5000;
             incinerateNonBuildable = true;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.factoryDestroy);
             size = 4;
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar, fakeErekir);
             unitCapModifier = 25;
             unitType = AquaUnitTypes.cull;
             unitTypes.add(AquaUnitTypes.cullButScorch);
@@ -132,8 +130,26 @@ public class CoreBlocks {
             envEnabled |= Env.terrestrial | Env.underwater;
             envDisabled = Env.none;
         }};
+        coreCuesta = new AquaCoreBlock("core-cuesta") {{
+            requirements(Category.effect, with(silicon, 3000, ferrosilicon, 2500, steel, 1500));
+            squareSprite = false;
+            health = 7500;
+            armor = 8;
+            itemCapacity = 7500;
+            incinerateNonBuildable = true;
+            destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.factoryDestroy);
+            size = 6;
+            unitCapModifier = 45;
+            unitType = AquaUnitTypes.cull;
+            unitTypes.add(AquaUnitTypes.cullButScorch);
+            unitTypes.add(AquaUnitTypes.cull);
+            alwaysUnlocked = false;
+            hasItems = true;
+            hasColor = true;
+            envEnabled |= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
+        }};
         buildCairn = new BuildTurret("build-cairn") {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             requirements(Category.effect, with(silicon, 120, copper, 50));
             size = 2;
             outlineRadius = 0;
@@ -145,7 +161,6 @@ public class CoreBlocks {
             consumePower(1.5f);
         }};
         constructionTower = new BuildTurret("construction-tower") {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             requirements(Category.effect, with(silicon, 700, polymer, 250, copper, 2000));
             size = 3;
             outlineRadius = 0;
@@ -159,7 +174,7 @@ public class CoreBlocks {
             consumePower(4);
         }};
         reconstruct = new BuildTurret("reconstruct") {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
+            shownPlanets.addAll(Planets.serpulo, fakeSerpulo);
             requirements(Category.effect, with(silicon, 700));
             size = 2;
             outlineRadius = 3;
@@ -172,23 +187,21 @@ public class CoreBlocks {
         }};
         mendPyre = new RegenPylon("mend-pyre") {{
             requirements(Category.effect, with(lead, 55, silicon, 80));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             size = 1;
             schematicPriority = 2;
             consumePower(0.75f);
             consumeItem(Items.silicon).boost();
-            range = 25;
+            range = 26;
             phaseRangeBoost = 3f;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.factoryDestroy);
-            phaseBoost = 2;
             healAmount = 250;
+            phaseBoost = 2;
             squareSprite = false;
             reload = 300;
             alwaysUnlocked = true;
         }};
         mendPylon = new RegenPylon("mend-pylon") {{
             requirements(Category.effect, with(silicon, 60, aluminum, 40));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             size = 2;
             schematicPriority = 7;
 
@@ -206,7 +219,6 @@ public class CoreBlocks {
         }};
         mendSubstation = new RegenPylon("mend-substation") {{
             requirements(Category.effect, with(silicon, 900, ferricMatter,240, polymer, 500));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             size = 3;
             schematicPriority = 7;
             lightningDamage = 10;
@@ -237,7 +249,6 @@ public class CoreBlocks {
         }};
         buzzSaw = new ChainsawTurret("buzzsaw") {{
             requirements(Category.turret, with(silicon, 250, lead, 300));
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             size = 3;
             destroyEffect = new MultiEffect(Fx.dynamicExplosion, AquaFx.factoryDestroy);
             consumePower(4);
@@ -247,6 +258,7 @@ public class CoreBlocks {
         }};
         neoplasiaMass = new GenericNeoplasiaBlock("neoplasia-mass") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             base = this;
             itemCapacity = 8;
             perItemCapacity = true;
@@ -313,6 +325,7 @@ public class CoreBlocks {
         }};
         enzyme = new NeoplasiaproductionBlock("enzyme") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             baseSize = 16;
             maxAmount = 1500;
             burstLength = 15;
@@ -331,6 +344,7 @@ public class CoreBlocks {
         }};
         petal = new NeoplasiaproductionBlock("petal") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             baseSize = 16;
             maxAmount = 900;
             burstLength = 15;
@@ -351,6 +365,7 @@ public class CoreBlocks {
         }};
         vein = new NeoplasmVein("vein") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             baseSize = 16;
             maxAmount = 2000;
             itemCapacity = 40;
@@ -362,6 +377,7 @@ public class CoreBlocks {
         }};
         heart = new NeoplasmHeart("neoplasm-heart") {{
             requirements(Category.effect, with(crystal, 9));
+            buildVisibility = BuildVisibility.sandboxOnly;
             size = 1;
             health = 500;
         }};
@@ -369,25 +385,30 @@ public class CoreBlocks {
         overwrite(OreSlurper, (NeoplasiaproductionBlock r) -> {
             r.oreUpgrade = (GenericNeoplasiaBlock) oreSlurperer;
             r.base = (GenericNeoplasiaBlock) neoplasiaMass;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(oreSlurperer, (NeoplasiaproductionBlock r) -> {
             r.oreUpgrade = (GenericNeoplasiaBlock) oresplurpererer;
             r.base = (GenericNeoplasiaBlock) neoplasiaMass;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(oresplurpererer, (NeoplasiaproductionBlock r) -> {
             r.oreUpgrade = null;
             r.base = (GenericNeoplasiaBlock) thicBlob;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(callus, (DefensiveNeoplasiaBlock r) -> {
             r.oreUpgrade = null;
             //DamageUpgrade works in reverse here.
             r.damageUpgrade = (GenericNeoplasiaBlock) neoplasiaMass;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(neoplasiaMass, (GenericNeoplasiaBlock r) -> {
             r.base = (GenericNeoplasiaBlock) neoplasiaMass;
             r.shouldEmpty2Upgrade = true;
             r.empty2Upgrade = (GenericNeoplasiaBlock) vein;
             r.empty2UpgradeCost = 1000;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         GenericNeoplasiaBlock.veinBlock = (GenericNeoplasiaBlock) vein;
         GenericNeoplasiaBlock.itemProducers.put(crystal, (GenericNeoplasiaBlock) enzyme);
@@ -401,6 +422,7 @@ public class CoreBlocks {
             branchCost = 200;
             unitGrowTime = 10f;
             unitItemCost = new ItemStack[]{new ItemStack(crystal, 2)};
+            buildVisibility = BuildVisibility.sandboxOnly;
         }};
         GenericNeoplasiaBlock.treeBlock = (GenericNeoplasiaBlock) tree;
         GenericNeoplasiaBlock.itemProducers.put(pearl, (GenericNeoplasiaBlock) petal);
