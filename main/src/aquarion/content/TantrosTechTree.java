@@ -17,6 +17,7 @@ import static aquarion.content.blocks.DistributionBlocks.*;
 import static aquarion.content.blocks.EffectBlocks.lantern;
 import static aquarion.content.blocks.LiquidBlocks.*;
 import static aquarion.content.blocks.PowerBlocks.*;
+import static aquarion.content.blocks.CoreBlocks..channel;
 import static aquarion.content.blocks.RefineryBlocks.*;
 import static aquarion.content.blocks.TurretBlocks.*;
 import static aquarion.content.blocks.UnitBlocks.*;
@@ -34,7 +35,11 @@ public class TantrosTechTree {
             context().researchCostMultipliers = costMultipliers;
             node(coreCuesta, () -> {});
             node(infomatic, () -> {
-                node(toggler, () -> {});
+                node(toggler, () -> {
+                    node(channel, () -> {
+                        node(splitter, () -> {});
+                    });
+                });
             });
             node(mendPyre, () -> {
                 node(mendPylon, () -> {
