@@ -8,6 +8,7 @@ import arc.graphics.g2d.Fill;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.util.Time;
+import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.Vars.tilesize;
 
@@ -21,6 +22,7 @@ public class DefensiveNeoplasiaBlock extends GenericNeoplasiaBlock{
         oreGrowBonus = 0;
         selfGrowRate = 0.9f;
         shouldEmptyUpgrade = false;
+        buildVisibility = BuildVisibility.sandboxOnly;
     }
     public float reverseUpgradeThreshold = 10f;
     public float reverseUpgradeChance = 0.0003f;

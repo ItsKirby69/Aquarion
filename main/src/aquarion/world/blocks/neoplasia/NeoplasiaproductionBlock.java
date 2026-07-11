@@ -22,6 +22,7 @@ import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.Tile;
+import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
@@ -51,6 +52,7 @@ public class NeoplasiaproductionBlock extends GenericNeoplasiaBlock{
         oreGrowBonus = 0;
         selfGrowRate = 0.9f;
         shouldEmptyUpgrade = false;
+        buildVisibility = BuildVisibility.sandboxOnly;
     }
 
     public class NeoplasiaProductionBlockBuild extends NeoplasiaBuild{

@@ -2,7 +2,7 @@ package aquarion;
 
 import aquarion.annotations.Annotations;
 import aquarion.content.ModMusic;
-import aquarion.dialogs.AquaDatabaseDialog;
+//import aquarion.dialogs.AquaDatabaseDialog;
 import aquarion.dialogs.AquaResearchDialog;
 import aquarion.ui.ModSettings;
 import arc.Events;
@@ -13,12 +13,12 @@ import arc.scene.ui.layout.*;
 @Annotations.EnsureLoad
 public class ModEventHandler {
     public static AquaResearchDialog techDialog;
-    public static AquaDatabaseDialog databaseDialog;
+    //public static AquaDatabaseDialog databaseDialog;
     //public static AquaHud hudFrag;
     public static WidgetGroup hudGroup;
     public static void load(){
         techDialog = new AquaResearchDialog();
-        databaseDialog = new AquaDatabaseDialog();
+        //databaseDialog = new AquaDatabaseDialog();
     }
     public static void init() {
 //        Events.on(EventType.ClientLoadEvent.class, e->{

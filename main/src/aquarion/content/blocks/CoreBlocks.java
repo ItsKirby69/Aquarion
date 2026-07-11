@@ -35,6 +35,7 @@ import mindustry.world.blocks.environment.OverlayFloor;
 import mindustry.world.blocks.logic.MessageBlock;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.StorageBlock;
+import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 
 import static aquarion.content.AquaItems.*;
@@ -257,6 +258,7 @@ public class CoreBlocks {
         }};
         neoplasiaMass = new GenericNeoplasiaBlock("neoplasia-mass") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             base = this;
             itemCapacity = 8;
             perItemCapacity = true;
@@ -323,6 +325,7 @@ public class CoreBlocks {
         }};
         enzyme = new NeoplasiaproductionBlock("enzyme") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             baseSize = 16;
             maxAmount = 1500;
             burstLength = 15;
@@ -341,6 +344,7 @@ public class CoreBlocks {
         }};
         petal = new NeoplasiaproductionBlock("petal") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             baseSize = 16;
             maxAmount = 900;
             burstLength = 15;
@@ -361,6 +365,7 @@ public class CoreBlocks {
         }};
         vein = new NeoplasmVein("vein") {{
             requirements(Category.effect, with(silicon, 1));
+            buildVisibility = BuildVisibility.sandboxOnly;
             baseSize = 16;
             maxAmount = 2000;
             itemCapacity = 40;
@@ -372,6 +377,7 @@ public class CoreBlocks {
         }};
         heart = new NeoplasmHeart("neoplasm-heart") {{
             requirements(Category.effect, with(crystal, 9));
+            buildVisibility = BuildVisibility.sandboxOnly;
             size = 1;
             health = 500;
         }};
@@ -379,25 +385,30 @@ public class CoreBlocks {
         overwrite(OreSlurper, (NeoplasiaproductionBlock r) -> {
             r.oreUpgrade = (GenericNeoplasiaBlock) oreSlurperer;
             r.base = (GenericNeoplasiaBlock) neoplasiaMass;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(oreSlurperer, (NeoplasiaproductionBlock r) -> {
             r.oreUpgrade = (GenericNeoplasiaBlock) oresplurpererer;
             r.base = (GenericNeoplasiaBlock) neoplasiaMass;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(oresplurpererer, (NeoplasiaproductionBlock r) -> {
             r.oreUpgrade = null;
             r.base = (GenericNeoplasiaBlock) thicBlob;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(callus, (DefensiveNeoplasiaBlock r) -> {
             r.oreUpgrade = null;
             //DamageUpgrade works in reverse here.
             r.damageUpgrade = (GenericNeoplasiaBlock) neoplasiaMass;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         overwrite(neoplasiaMass, (GenericNeoplasiaBlock r) -> {
             r.base = (GenericNeoplasiaBlock) neoplasiaMass;
             r.shouldEmpty2Upgrade = true;
             r.empty2Upgrade = (GenericNeoplasiaBlock) vein;
             r.empty2UpgradeCost = 1000;
+            r.buildVisibility = BuildVisibility.sandboxOnly;
         });
         GenericNeoplasiaBlock.veinBlock = (GenericNeoplasiaBlock) vein;
         GenericNeoplasiaBlock.itemProducers.put(crystal, (GenericNeoplasiaBlock) enzyme);
@@ -411,6 +422,7 @@ public class CoreBlocks {
             branchCost = 200;
             unitGrowTime = 10f;
             unitItemCost = new ItemStack[]{new ItemStack(crystal, 2)};
+            buildVisibility = BuildVisibility.sandboxOnly;
         }};
         GenericNeoplasiaBlock.treeBlock = (GenericNeoplasiaBlock) tree;
         GenericNeoplasiaBlock.itemProducers.put(pearl, (GenericNeoplasiaBlock) petal);

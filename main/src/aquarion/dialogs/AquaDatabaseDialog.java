@@ -1,3 +1,4 @@
+/*
 package aquarion.dialogs;
 
 
@@ -197,4 +198,4 @@ public class AquaDatabaseDialog extends BaseDialog {
         return (!Vars.state.isCampaign() && !Vars.state.isMenu()) || content.unlocked();
     }
 }
-
+*/

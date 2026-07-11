@@ -24,6 +24,7 @@ import mindustry.world.blocks.defense.Radar;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.Attribute;
+import mindustry.world.meta.BuildVisibility;
 
 import static aquarion.content.AquaAttributes.*;
 import static aquarion.content.AquaItems.salt;
@@ -630,6 +631,7 @@ public class EnvironmentBlocks {
             requirements(Category.defense, with(silicon, 25, lead, 15, graphite, 25));
             variants = 2;
             health = 150;
+            buildVisibility = BuildVisibility.sandboxOnly;
         }};
         smallDefunctRadarTower = new Radar("defunct-small-radar-tower") {{
             size = 3;
@@ -639,6 +641,7 @@ public class EnvironmentBlocks {
             consumePower(1f);
             discoveryTime = 300f;
             fogRadius = 16;
+            buildVisibility = BuildVisibility.sandboxOnly;
         }};
         sporeMoss.attributes.set(fertility, 0.75f);
         basalt.attributes.set(metamorphic, 0.5f);
