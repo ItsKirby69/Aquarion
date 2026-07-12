@@ -20,7 +20,6 @@ public class AquaLiquids {
         water.alwaysUnlocked = false;
 
         clearwater = new Liquid("clear-water", Color.valueOf("#47a3d1")) {{
-            shownPlanets.addAll(Planets.serpulo, Planets.erekir, fakeSerpulo, tantros2, qeraltar);
             canStayOn.addAll(water);
             heatCapacity = 0.7f;
             viscosity = 0.45f;
