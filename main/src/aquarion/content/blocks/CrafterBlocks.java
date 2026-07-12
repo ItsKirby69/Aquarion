@@ -709,10 +709,11 @@ public class CrafterBlocks {
                 drawIcon = false;
             }}, new DrawRegion("-bottom"), new DrawLiquidTile(water, 1.5f) {{
                 alpha = 0.6f;
-            }}
-                    , new DrawLiquidTile(oil, 1.5f) {{
+            }}, new DrawLiquidTile(oil, 1.5f) {{
                 alpha = 0.6f;
             }}, new DrawLiquidTile(water, 1.5f) {{
+                alpha = 0.6f;
+            }}, new DrawLiquidTile(clearwater, 1.5f) {{
                 alpha = 0.6f;
             }}, new DrawDefault(), new DrawGlowRegion("-glow") {{
                 alpha = 0.3f;
@@ -744,8 +745,7 @@ public class CrafterBlocks {
                 drawIcon = false;
             }}, new DrawRegion("-bottom"), new DrawLiquidTile(water, 1.5f) {{
                 alpha = 0.6f;
-            }}
-                    , new DrawBlurSpin() {{
+            }}, new DrawBlurSpin() {{
                 suffix = "-fan";
                 x = -31 / 4f;
                 y = -14 / 4f;
@@ -768,6 +768,8 @@ public class CrafterBlocks {
             }}, new DrawLiquidTile(oil, 1.5f) {{
                 alpha = 0.6f;
             }}, new DrawLiquidTile(water, 1.5f) {{
+                alpha = 0.6f;
+            }}, new DrawLiquidTile(clearwater, 1.5f) {{
                 alpha = 0.6f;
             }}, new DrawDefault(), new DrawGlowRegion("-glow") {{
                 alpha = 0.3f;
