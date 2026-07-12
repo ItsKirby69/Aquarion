@@ -67,6 +67,9 @@ public class AquaResearchDialog extends BaseDialog {
     public ItemsDisplay itemDisplay;
     public View view;
 
+    /**Period of the arrow in seconds; i.e. the amount of time it takes for the arrow to go from the start of the line to the end*/
+    public double arrowPeriod = 60 * 4;
+
     //temporary points
     public static Vec2 v1 = new Vec2(), v2 = new Vec2(), v3 = new Vec2(), v4 = new Vec2(), offset = new Vec2(),
         v5 = new Vec2();
@@ -319,16 +322,29 @@ public class AquaResearchDialog extends BaseDialog {
         treeLayout();
     }
 
+    /**First pass, gather the leaf counts from the tree.*/
+    int precomputeLeaves(TechTreeNode node){
+        int sum = 0;
+        for(TechTreeNode child : node.children){
+            sum += precomputeLeaves(child);
+        }
+        if(node.children.length == 0) sum = 1;
+        node.leaves = sum;
+        return node.leaves;
+    }
+
     /**First pass, gather the weights and depths of the nodes.*/
-    void precomputeTreeProperties(TechTreeNode node, int depth){
+    void precomputeWeights(TechTreeNode node, int depth){
         node.depth = depth - 1;
 
-        node.weight = 0;
+        node.totalWeight = 1;
         for(int i = 0; i < node.children.length; i++){
-            precomputeTreeProperties(node.children[i], depth + 1);
-            node.weight += node.children[i].weight;
+            TechTreeNode child = node.children[i];
+            precomputeWeights(child, depth + 1);
+            child.weight = child.leaves + 2;
+            node.totalWeight += child.weight;
         }
-        if(node.weight < 1) node.weight = 1;
+        if(node.totalWeight < 1) node.totalWeight = 1;
     }
 
     /**Second pass, find the slices and border angles of the nodes in each layer*/
@@ -341,7 +357,7 @@ public class AquaResearchDialog extends BaseDialog {
         //compute node placement angles
         for(int i = 0; i < node.children.length; i++){
             TechTreeNode child = node.children[i];
-            float weightRatio = (float) child.weight / node.weight;
+            float weightRatio = (float) child.weight / node.totalWeight;
             child.angleWidth = (node.endAngle - node.startAngle) * weightRatio;
             float angle = angleCursor + child.angleWidth / 2f;
             child.radAngle = angle * Mathf.degreesToRadians;
@@ -455,8 +471,11 @@ public class AquaResearchDialog extends BaseDialog {
         root.startAngle = 0;
         root.endAngle = 360;
 
-        //Prepare tree
-        precomputeTreeProperties(root, 1);
+        //Prepare leaf counts
+        precomputeLeaves(root);
+
+        //Prepare weights
+        precomputeWeights(root, 1);
 
         //Prepare borders and slices
         precomputeNodeSlices(root);
@@ -502,8 +521,14 @@ public class AquaResearchDialog extends BaseDialog {
         /**The depth of this node in the tree. This is also the number of parents above this node.*/
         public int depth = 0;
 
-        /**The weight of this node's subtree when divying up arcs.*/
+        /**The weight of this node and its subtree.*/
         public int weight = 1;
+
+        /**The total weight of this node's children.*/
+        public int totalWeight = 1;
+
+        /**The number of leaves this node has.*/
+        public int leaves = 1;
 
         /**The angle of this node from the center of the tree in radians*/
         float radAngle = 0;
@@ -970,7 +995,7 @@ public class AquaResearchDialog extends BaseDialog {
                         Lines.dashLine(node.x + offsetX, node.y + offsetY, child.x + offsetX, child.y + offsetY, divisions);
                     } else {
                         Lines.line(node.x + offsetX, node.y + offsetY, child.x + offsetX, child.y + offsetY);
-                        float progress = ((float)(System.nanoTime() / 5e7) % (60f * 4f)) / (60f * 4f);
+                        float progress = (float)(((System.nanoTime() / (1e9/60)) % arrowPeriod) / arrowPeriod);
                         float arrowX = Mathf.lerp(node.x + offsetX, child.x + offsetX, progress);
                         float arrowY = Mathf.lerp(node.y + offsetY, child.y + offsetY, progress);
                         float angle = Angles.angle(node.x + offsetX, node.y + offsetY, child.x + offsetX, child.y + offsetY);
