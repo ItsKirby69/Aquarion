@@ -43,7 +43,7 @@ public class AquaMenuDialog extends BaseDialog {
         cont.clear();
 
         float paneWidth = Vars.mobile ? 460f : 420f;
-        float paneHeight = Vars.mobile ? 350f : 650f;
+        float paneHeight = Vars.mobile ? 450f : 650f;
         float buttonWidth = Vars.mobile ? paneWidth - 50f : 380f;
         float buttonHeight = Vars.mobile ? 85f : 100f;
 
