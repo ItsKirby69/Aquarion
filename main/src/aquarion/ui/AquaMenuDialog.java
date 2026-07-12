@@ -84,7 +84,7 @@ public class AquaMenuDialog extends BaseDialog {
                 .size(buttonWidth, 60f)
                 .padBottom(10f)
                 .row();
-            }).size(paneWidth, Vars.mobile ? 140f : 250f);
+            }).size(paneWidth, Vars.mobile ? 230f : 250f);
         } else {
             var cell = body.pane(t -> {
                 t.center();
