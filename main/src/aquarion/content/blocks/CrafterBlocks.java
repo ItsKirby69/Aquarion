@@ -709,12 +709,13 @@ public class CrafterBlocks {
                 drawIcon = false;
             }}, new DrawRegion("-bottom"), new DrawLiquidTile(water, 1.5f) {{
                 alpha = 0.6f;
-            }}
-                    , new DrawLiquidTile(oil, 1.5f) {{
+            }}, new DrawLiquidTile(oil, 1.5f) {{
                 alpha = 0.6f;
             }}, new DrawLiquidTile(water, 1.5f) {{
                 alpha = 0.6f;
-            }}, new DrawDefault(), new DrawGlowRegion("-glow") {{
+            }}, new DrawLiquidTile(clearwater, 1.5f) {{
+                alpha = 0.6f;
+            }},  new DrawDefault(), new DrawGlowRegion("-glow") {{
                 alpha = 0.3f;
                 color = Color.valueOf("e68569");
                 glowIntensity = 0.4f;
@@ -768,6 +769,8 @@ public class CrafterBlocks {
             }}, new DrawLiquidTile(oil, 1.5f) {{
                 alpha = 0.6f;
             }}, new DrawLiquidTile(water, 1.5f) {{
+                alpha = 0.6f;
+            }}, new DrawLiquidTile(clearwater, 1.5f) {{
                 alpha = 0.6f;
             }}, new DrawDefault(), new DrawGlowRegion("-glow") {{
                 alpha = 0.3f;

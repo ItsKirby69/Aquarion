@@ -402,7 +402,7 @@ public class EnvironmentBlocks {
             shallow = true;
         }};
         clearWaterFloor = new Floor("clear-water-floor", 0) {{
-            liquidDrop = Liquids.water;
+            liquidDrop = AquaLiquids.clearwater;
             liquidMultiplier = 0.5f;
             speedMultiplier = 0.7f;
             cacheLayer = CacheLayer.water;
