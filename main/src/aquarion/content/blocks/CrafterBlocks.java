@@ -715,7 +715,7 @@ public class CrafterBlocks {
                 alpha = 0.6f;
             }}, new DrawLiquidTile(clearwater, 1.5f) {{
                 alpha = 0.6f;
-            }},  new DrawDefault(), new DrawGlowRegion("-glow") {{
+            }}, new DrawDefault(), new DrawGlowRegion("-glow") {{
                 alpha = 0.3f;
                 color = Color.valueOf("e68569");
                 glowIntensity = 0.4f;
@@ -745,8 +745,7 @@ public class CrafterBlocks {
                 drawIcon = false;
             }}, new DrawRegion("-bottom"), new DrawLiquidTile(water, 1.5f) {{
                 alpha = 0.6f;
-            }}
-                    , new DrawBlurSpin() {{
+            }}, new DrawBlurSpin() {{
                 suffix = "-fan";
                 x = -31 / 4f;
                 y = -14 / 4f;
