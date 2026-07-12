@@ -63,7 +63,7 @@ public class EnvironmentBlocks {
             boricFloor, pinkSaltFloor, pinkSaltFlats, smoothPinkSaltFloor, boricFloorDense, andesite, basaltPlates, ultrafamicPlates, chertPlates, greenCoralFloor, BlueCoralFloor, redCoralFloor,
             andesiteLayers, basaltSpikes, basaltHolePlates, blueSandFLoor, redSandFLoor, brecciaFloor, soil, fertileSoil, nickelFloor, scrapFloor, andesiteRubble, qusGrass, clay, leafLitter, leafLitterDense, denseStone, stonePores, packedSnow;
     //liquids
-    public static Block clearWater, blueSandWater, iceWater, brine_liquid, lava, shallowSlag2, wetRocks, shallowSlag, shallowYellowstoneSlag, shallowSlagPlates, shallowLava;
+    public static Block clearWaterFloor, blueSandWater, iceWater, brine_liquid, lava, shallowSlag2, wetRocks, shallowSlag, shallowYellowstoneSlag, shallowSlagPlates, shallowLava;
     // ores
     public static Block oreNickelWall, oreRadium, oreUranium, orePitchblende, oreNickel, oreBauxite, oreAluminum, oreSilicon, acuminiteOre, ferricOre, serpentineOre, miniumOre, pentlanditeOre;
     //walls
@@ -401,7 +401,7 @@ public class EnvironmentBlocks {
             isLiquid = true;
             shallow = true;
         }};
-        clearWater = new Floor("clear-water", 0) {{
+        clearWaterFloor = new Floor("clear-water-floor", 0) {{
             liquidDrop = Liquids.water;
             liquidMultiplier = 0.5f;
             speedMultiplier = 0.7f;
