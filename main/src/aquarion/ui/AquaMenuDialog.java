@@ -43,7 +43,7 @@ public class AquaMenuDialog extends BaseDialog {
         cont.clear();
 
         float paneWidth = Vars.mobile ? 460f : 420f;
-        float paneHeight = Vars.mobile ? 550f : 650f;
+        float paneHeight = Vars.mobile ? 350f : 650f;
         float buttonWidth = Vars.mobile ? paneWidth - 50f : 380f;
         float buttonHeight = Vars.mobile ? 85f : 100f;
 
@@ -84,7 +84,7 @@ public class AquaMenuDialog extends BaseDialog {
                 .size(buttonWidth, 60f)
                 .padBottom(10f)
                 .row();
-            }).size(paneWidth, Vars.mobile ? 140f : 250f);
+            }).size(paneWidth, Vars.mobile ? 230f : 250f);
         } else {
             var cell = body.pane(t -> {
                 t.center();
