@@ -398,9 +398,7 @@ public class TantrosTechTree {
                 nodeProduce(nickel, () -> {
                     nodeProduce(air, () -> {
                         nodeProduce(water, () -> {
-                            nodeProduce(clearwater,Seq.with(
-                                    new Objectives.Research(filter)
-                            ), () -> {});
+                            nodeProduce(clearwater, () -> {});
                             nodeProduce(halideWater, () -> {
                                 nodeProduce(muriaticAcid, () -> {
                                     nodeProduce(hydroxide, () -> {});
@@ -555,9 +553,9 @@ public class TantrosTechTree {
                     node(scrapCentrifuge, Seq.with(
                             new Objectives.OnSector(frozenLake)
                     ), () -> {
-                        node(filter, Seq.with(
+                        /*node(filter, Seq.with(
                                 new Objectives.SectorComplete(bay)
-                        ), () -> {});
+                        ), () -> {});*/
                     });
                     node(cupronickelAlloyer, Seq.with(
                             new Objectives.SectorComplete(resurgence)
