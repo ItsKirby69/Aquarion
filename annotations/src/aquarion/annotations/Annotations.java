@@ -46,7 +46,7 @@ public class Annotations{
         Class<?>[] value();
 
         /** @return Whether the class can serialize itself */
-        boolean serialize() default false;
+        boolean serialize() default true;
 
         /** @return Whether the class can write/read to/from save files */
         boolean genio() default true;
