@@ -179,9 +179,9 @@ public class AquaMenuDialog extends BaseDialog {
 
                 t.button(b -> {
                     createRoundAvatar(b, "thinkerdoodle", Icon.players, 32f);
-                    b.add("Thinkerdoodle").left().padLeft(15f);
+                    b.add("Plooey").left().padLeft(15f);
                 }, () -> showAuthorInfo(
-                    "Thinkerdoodle",
+                    "Plooey",
                     Core.bundle.get("aquarion.menu.desc_Thinkerdoodle"),
                     "https://github.com/BSp-2",
                     "thinkerdoodle",
