@@ -19,6 +19,7 @@ import mindustry.graphics.CacheLayer;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
+import mindustry.type.Liquid;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Radar;
 import mindustry.world.blocks.defense.Wall;
@@ -408,7 +409,7 @@ public class EnvironmentBlocks {
             shallow = true;
         }};
         clearWaterFloor = new Floor("clear-water-floor", 0) {{
-            liquidDrop = AquaLiquids.clearwater;
+            liquidDrop = Liquids.water;
             liquidMultiplier = 0.5f;
             speedMultiplier = 0.7f;
             cacheLayer = CacheLayer.water;
