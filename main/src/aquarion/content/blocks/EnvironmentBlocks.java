@@ -239,12 +239,14 @@ public class EnvironmentBlocks {
         }};
         overwrite(arkyicVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(basaltVent, (SteamVent s) -> s.effect = AquaFx.vent1);
+        overwrite(basaltVent, (SteamVent s) -> s.attributes.set(metamorphic, 0.4f));
         overwrite(carbonVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(stoneVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(rhyoliteVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(crystallineVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(yellowStoneVent, (SteamVent s) -> s.effect = AquaFx.vent1);
         overwrite(redStoneVent, (SteamVent s) -> s.effect = AquaFx.vent1);
+        overwrite(shale, (Floor s) -> s.attributes.set(metamorphic, 1f));
 
         feldspar_vent = new customVent("feldspar-vent") {{
             attributes.set(Attribute.steam, 1f);
@@ -252,6 +254,7 @@ public class EnvironmentBlocks {
             parent = blendGroup = EnvironmentBlocks.feldspar;
             effectSpacing = 15f;
             effect = AquaFx.geysers;
+            attributes.set(iron, 0.8f);
         }};
         Blocks.salt.itemDrop = salt;
         pinkSaltFlats = new  AquaTiledFloor("pink-salt-flats"){{
@@ -316,6 +319,7 @@ public class EnvironmentBlocks {
             effectSpacing = 15f;
             variants = 2;
             effect = AquaFx.vent1;
+            itemDrop = brimstone;
         }};
 
         shaleVent = new SteamVent("shale-vent") {{
@@ -324,6 +328,7 @@ public class EnvironmentBlocks {
             effectSpacing = 15f;
             variants = 3;
             effect = AquaFx.vent1;
+            attributes.set(metamorphic, 0.8f);
         }};
         cupriteFloor = new Floor("cuprite-floor", 3) {{
             emitLight = true;
@@ -361,6 +366,7 @@ public class EnvironmentBlocks {
                 effectSpacing = 15f;
                 variants = 2;
                 effect = AquaFx.vent1;
+                attributes.set(metamorphic, 0.4f);
             }};
         basaltSpikes = new Floor("basalt-spikes", 4) {{
             wall = duneWall;
