@@ -53,4 +53,4 @@ We welcome community contributions! Whether you want to help with code, sprites,
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Twcash/Aquarion&type=Date)](https://star-history.com/#Twcash/Aquarion&Date)
+[![Star History Chart]([https://api.star-history.com/svg?repos=Twcash/Aquarion&type=Date)](https://star-history.com/#Twcash/Aquarion&Date](https://www.star-history.com/?repos=Twcash%2FAquarion&type=date&legend=top-left))
