@@ -71,9 +71,9 @@ public class AquaUnitTypes {
     public static UnitType isop, empusa, oratoria, rhombodera, parasphendale;
     public static UnitType frost, rime, verglas, glaciate, permafrost;
     public static UnitType cog, tenon, assembly, fabricant;
-    public static @Annotations.EntityDef(value = {Unitc.class, JetUnitc.class}) UnitType martyr;
-    public static @Annotations.EntityDef(value = {Unitc.class, DialogueUnitc.class, LegsUnit.class}) DefunctUnitType endure;
-    public static @Annotations.EntityDef(value = {Unitc.class, FlyingDialogueUnitc.class}) DefunctUnitType vilify;
+    public static @Annotations.EntityDef(value = {Unitc.class, JetUnitc.class}, serialize = false) UnitType martyr;
+    public static @Annotations.EntityDef(value = {Unitc.class, DialogueUnitc.class, LegsUnit.class}, serialize = false) DefunctUnitType endure;
+    public static @Annotations.EntityDef(value = {Unitc.class, FlyingDialogueUnitc.class}, serialize = false) DefunctUnitType vilify;
 
     public static UnitType visitor, infantry, concussor, breaker, suppressor, lightTruck, healCraft, revenant, wretch, haint, ghoul, wraith, chimera, amalgam, corpse;
     //core units and transport
