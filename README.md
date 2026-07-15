@@ -53,4 +53,10 @@ We welcome community contributions! Whether you want to help with code, sprites,
 
 ## Star History
 
-[![Star History Chart]([https://api.star-history.com/svg?repos=Twcash/Aquarion&type=Date)](https://star-history.com/#Twcash/Aquarion&Date](https://www.star-history.com/?repos=Twcash%2FAquarion&type=date&legend=top-left))
+<a href="https://www.star-history.com/?repos=Twcash%2FAquarion&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Twcash/Aquarion&type=date&theme=dark&legend=top-left&sealed_token=VObfnvkKCiuYbRHoX9JPRX49-ggXuhVsgt-f2LUmsW34Sc0nmpCqyrzQO863qBgeaS88RaTiATjPCUpqp4AIAuuXEkOsZbCrHRhEBJ6FQUd5_92KOPwsnQ" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Twcash/Aquarion&type=date&legend=top-left&sealed_token=VObfnvkKCiuYbRHoX9JPRX49-ggXuhVsgt-f2LUmsW34Sc0nmpCqyrzQO863qBgeaS88RaTiATjPCUpqp4AIAuuXEkOsZbCrHRhEBJ6FQUd5_92KOPwsnQ" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Twcash/Aquarion&type=date&legend=top-left&sealed_token=VObfnvkKCiuYbRHoX9JPRX49-ggXuhVsgt-f2LUmsW34Sc0nmpCqyrzQO863qBgeaS88RaTiATjPCUpqp4AIAuuXEkOsZbCrHRhEBJ6FQUd5_92KOPwsnQ" />
+ </picture>
+</a>
