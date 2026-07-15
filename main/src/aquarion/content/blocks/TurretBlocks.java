@@ -2984,7 +2984,7 @@ public class TurretBlocks {
             }};
         }};
         memorial = new PowerTurret("memorial"){{
-            requirements(Category.turret, with(silicon, 2000, cupronickel, 500));
+            requirements(Category.turret, with(silicon, 2000, metaglass, 150, graphite, 250));
             size = 3;
             category = Category.turret;
             buildVisibility = BuildVisibility.sandboxOnly;
