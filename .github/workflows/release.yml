@@ -34,7 +34,7 @@ jobs:
       - name: Collect JAR
         run: |
           mkdir release
-          find . -name "*.jar" -path "*/build/libs/*" -exec cp {} release/ \;
+          find . -name "*.jar" -path "*/build/libs/*" ! -name "*-raw.jar" ! -name "*-sources.jar" -exec cp {} release/ \;
 
       - name: Create Tag
         run: |
