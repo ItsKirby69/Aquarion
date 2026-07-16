@@ -11,6 +11,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,22 +22,52 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "21"
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Make Gradle executable
-        run: chmod +x gradlew
-
-      - name: Build
-        run: ./gradlew jar
-
-      - name: Collect JAR
+      - name: Extract Mod Info
+        id: mod_info
         run: |
-          mkdir release
-          find . -name "*.jar" -path "*/build/libs/*" ! -name "*-raw.jar" ! -name "*-sources.jar" -exec cp {} release/ \;
+          MOD_DISPLAY_NAME=$(jq -r '.displayName' mod.json)
+          MOD_DISPLAY_NAME_CLEAN=$(echo "$MOD_DISPLAY_NAME" | tr -d ' ')
+          DEXED_JAR_NAME="${MOD_DISPLAY_NAME_CLEAN}.jar"
+          DEXED_JAR_PATH="main/build/libs/${DEXED_JAR_NAME}"
+
+          echo "dexed_jar_path=${DEXED_JAR_PATH}" >> $GITHUB_OUTPUT
+          echo "dexed_jar_name=${DEXED_JAR_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4.7.1
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK Platform 33 and Build Tools
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platforms;android-33" "build-tools;33.0.2"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Update bundles
+        run: |
+          chmod +x gradlew
+          ./gradlew updateBundles
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --global user.name "Github Actions"
+            git config --global user.email "actions@github.com"
+            git add main/assets/bundles/*
+            git commit -m "Automatic bundle update"
+            git push
+          fi
+
+      - name: Build mod artifact
+        run: ./gradlew main:deploy main:dex tools:proc
 
       - name: Create Tag
         run: |
@@ -49,4 +82,4 @@ jobs:
           tag_name: ${{ inputs.version }}
           name: ${{ inputs.version }}
           generate_release_notes: true
-          files: release/*.jar
+          files: ${{ steps.mod_info.outputs.dexed_jar_path }}
