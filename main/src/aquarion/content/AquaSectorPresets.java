@@ -28,7 +28,6 @@ public class AquaSectorPresets {
         lib = new SectorPreset("lakesideLibrary", AquaPlanets.delubrum,1){{
         }};
         ruinedRepository = new SectorPreset("ruined-repository", AquaPlanets.delubrum,0){{
-            overrideLaunchDefaults = true;
         }};
         frigidShores = new SectorPreset("frigidShores", fakeSerpulo, 467){{
             allDatabaseTabs = true;
