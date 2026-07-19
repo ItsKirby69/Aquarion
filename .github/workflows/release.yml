@@ -7,6 +7,11 @@ on:
         description: "Release version (e.g. v3.0.0)"
         required: true
         type: string
+      description:
+        description: "Release description / Changelog (Optional)"
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -43,6 +48,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: ci.yml
           workflow_conclusion: success
+          branch: ${{ github.ref_name }}
           name: ${{ steps.mod_info.outputs.artifact_name }}
           path: ./downloaded_artifact
 
@@ -58,5 +64,6 @@ jobs:
         with:
           tag_name: ${{ inputs.version }}
           name: ${{ inputs.version }}
+          body: ${{ inputs.description }}
           generate_release_notes: true
           files: ./downloaded_artifact/${{ steps.mod_info.outputs.dexed_jar_name }}
