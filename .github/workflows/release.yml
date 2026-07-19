@@ -41,7 +41,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v9
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: java_ci.yml
+          workflow: ci.yml
           workflow_conclusion: success
           name: ${{ steps.mod_info.outputs.artifact_name }}
           path: ./downloaded_artifact
