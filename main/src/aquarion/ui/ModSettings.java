@@ -71,6 +71,9 @@ public class ModSettings {
                     AquaPlanets.tantros2.techTree.reset();
                     AquaPlanets.fakeSerpulo.techTree.reset();
                     Core.settings.remove("unlocks");
+
+                    aquarion.world.blocks.effect.ResearchServer.globalResearch.clear();
+                    aquarion.world.blocks.effect.ResearchServer.saveGlobalResearch();
                 });
             }));
 

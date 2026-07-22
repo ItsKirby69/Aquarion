@@ -6,6 +6,8 @@ import aquarion.world.blocks.core.AquaCoreBlock;
 import aquarion.world.blocks.core.Bomb;
 import aquarion.world.blocks.core.InfomaticBlock;
 import aquarion.world.blocks.core.OverclockProjector;
+import aquarion.world.blocks.effect.ResearchServer;
+import aquarion.world.blocks.effect.ResearchVoider;
 import aquarion.world.blocks.defense.ChainsawTurret;
 import aquarion.world.blocks.defense.RegenPylon;
 import aquarion.world.blocks.defense.deflectorShield;
@@ -49,7 +51,7 @@ import static mindustry.type.ItemStack.with;
 
 public class CoreBlocks {
     public static Block bomb, toggler, splitter, channel, storageReader, merger, buzzSaw, reception, infomatic, mendPyre, mendSubstation, mendPylon, cache, coreCuesta, overClockProjector,
-            coreEscarpment, petal, reconstruct,  corePike, buildCairn, constructionTower, crate, deflectorWell, neoplasiaMass, OreSlurper, oreSlurperer, oresplurpererer, callus, thicBlob, enzyme, heart, vein, tree;
+            coreEscarpment, petal, reconstruct,  corePike, buildCairn, constructionTower, crate, deflectorWell, neoplasiaMass, OreSlurper, oreSlurperer, oresplurpererer, callus, thicBlob, enzyme, heart, vein, tree, researchServer, researchVoider;
 
     public static <T extends UnlockableContent> void overwrite(UnlockableContent target, Cons<T> setter) {
         setter.get((T) target);
@@ -435,6 +437,26 @@ public class CoreBlocks {
             hasBoost = false;
             speedBoost = 2.0f;
             squareSprite = false;
+        }};
+        researchServer = new ResearchServer("storage-drive") {{
+            requirements(Category.effect, with(silicon, 400, copper, 700, nickel, 900));
+            size = 2;
+            buildVisibility = BuildVisibility.campaignOnly;
+            researchCapacity = 500;
+            squareSprite = false;
+            alwaysUnlocked = true;
+            researchCostMultiplier = 0;
+        }};
+        researchVoider = new ResearchVoider("translation-matrix") {{
+            requirements(Category.effect, with(silicon, 5000, nickel, 2000, copper, 7000, metaglass, 1000));
+            size = 5;
+            buildVisibility = BuildVisibility.campaignOnly;
+            processRate = 1f;
+            itemCapacity = 500;
+            consumePower(10f);
+            squareSprite = false;
+            alwaysUnlocked = true;
+            researchCostMultiplier = 0;
         }};
     }
 }
