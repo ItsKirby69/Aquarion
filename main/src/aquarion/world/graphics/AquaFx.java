@@ -29,6 +29,8 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.content.Fx;
 
+import mindustry.type.Item;
+
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.graphics.g2d.Lines.stroke;
@@ -1402,7 +1404,84 @@ public class AquaFx {
                 randLenVectors(e.id, 4, e.fin() * 5f, (x, y) ->
                         Fill.square(e.x + x, e.y + y, e.fout() + 0.5f, 0)
                 );
-            });
+            }),
+            translatorCharge = new Effect(90, e -> {
+                if(e.data instanceof Float data) {
+                    stroke(e.fin() * 1.5f * data);
+                    alpha(e.fin()* e.fout());
+                    color(Color.white);
+                    randLenVectors(e.id, 16, Interp.pow2In.apply(e.foutpow()) * 32 * data, (x, y) -> {
+                        float ang = Mathf.angle(x, y);
+                        lineAngle(e.x + x, e.y + y, ang, (e.fout() * 6 + 1f)* data);
+                    });
+                }
+            }).layer(Layer.blockOver+1),
+            vaporizeItem = new Effect(140, 50, e -> {
+                Item item = (Item) e.data;
+                if(item == null) return;
+
+                float fin = e.fin();
+
+                // bright flash at the start
+                float flash = 1f - Mathf.clamp(fin * 4f);
+                if(flash > 0f){
+                    blend(Blending.additive);
+                    color(Color.white, fin * 3f);
+                    alpha(flash * 0.8f);
+                    Fill.circle(e.x, e.y, 40f * flash);
+                    blend();
+                }
+
+                float iconAlpha = Mathf.clamp(1f - fin * 1.5f);
+                float iconSize = 16f;//iunno
+                if(iconAlpha > 0f && item.fullIcon != null){
+                    rand.setSeed(e.id);
+                    color(Color.white);
+                    alpha(iconAlpha * 0.7f);
+                    Draw.rect(item.fullIcon, e.x+ rand.random(-9,9) * Interp.pow2In.apply(fin), e.y + rand.random(-9,9) * Interp.pow2In.apply(fin), (iconSize * 1.3f)*Interp.pow2In.apply(fin), (iconSize * 1.3f)*Interp.pow2In.apply(fin), rand.random(-360, 360)*fin);
+
+                    color(Color.black);
+                    alpha(iconAlpha);
+                    Draw.rect(item.fullIcon, e.x+ rand.random(-9,9) * Interp.pow2In.apply(fin), e.y + rand.random(-9,9) * Interp.pow2In.apply(fin),(iconSize*1.2f)*Interp.pow2In.apply(fin), (iconSize*1.2f)*Interp.pow2In.apply(fin), rand.random(-360, 360)*fin);
+                }
+                rand.setSeed(e.id);
+                for(int i = 0; i < 18; i++){
+                    float angle = rand.random(360f);
+                    float speed = rand.random(0.15f, 0.5f);
+                    float drift = fin * 40f * speed;
+                    Tmp.v1.trns(angle, drift);
+                    float px = e.x + Tmp.v1.x;
+                    float py = e.y + Tmp.v1.y;
+                    float size = rand.random(0.4f, 1.4f) * (1f - fin * 0.6f);
+
+                    color(Color.white);
+                    alpha(1);
+                    Fill.circle(px+ e.x+ rand.random(3, -3) * fin, py+ rand.random(3, -3) * fin, size);
+                }
+                if(fin < 0.6f){
+                    float ringFin = fin / 0.6f;
+                    color(Color.white);
+                    alpha((1f - ringFin) * 0.2f);
+                    stroke(1.2f * (1f - ringFin));
+                    Lines.circle(e.x, e.y, 6f + ringFin * 32);
+                }
+                Draw.z(Layer.blockUnder-0.1f);
+                if(fin < 0.2f){
+                    float ringFin = fin / 0.2f;
+                    color(Color.white);
+                    alpha((1f - ringFin) * 0.6f);
+                    stroke(2f * (1f - ringFin));
+                    Lines.circle(e.x, e.y, 12f + ringFin * 40);
+                }
+                Draw.z(Layer.flyingUnitLow);
+                color(Color.white);
+                stroke(e.fout() * 1.4f);
+
+                randLenVectors(e.id, 12, e.finpow() * 40, (x, y) -> {
+                    float ang = Mathf.angle(x, y);
+                    lineAngle(e.x + x, e.y + y, ang, e.fout() * 4 + 1f);
+                });
+            }).layer(Layer.flyingUnitLow);
 
     private static final Vec2 rv = new Vec2();
 

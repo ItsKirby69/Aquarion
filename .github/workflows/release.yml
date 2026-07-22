@@ -7,34 +7,50 @@ on:
         description: "Release version (e.g. v3.0.0)"
         required: true
         type: string
+      description:
+        description: "Release description / Changelog (Optional)"
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: write
+  actions: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "21"
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Make Gradle executable
-        run: chmod +x gradlew
-
-      - name: Build
-        run: ./gradlew jar
-
-      - name: Collect JAR
+      - name: Extract Mod Info
+        id: mod_info
         run: |
-          mkdir release
-          find . -name "*.jar" -path "*/build/libs/*" -exec cp {} release/ \;
+          MOD_DISPLAY_NAME=$(jq -r '.displayName' mod.json)
+          MOD_DISPLAY_NAME_CLEAN=$(echo "$MOD_DISPLAY_NAME" | tr -d ' ')
+          DEXED_JAR_NAME="${MOD_DISPLAY_NAME_CLEAN}.jar"
+          ARTIFACT_NAME="${MOD_DISPLAY_NAME_CLEAN} (in a box)"
+
+          echo "dexed_jar_name=${DEXED_JAR_NAME}" >> $GITHUB_OUTPUT
+          echo "artifact_name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Download built artifact from Java CI
+        uses: dawidd6/action-download-artifact@v9
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: ci.yml
+          workflow_conclusion: success
+          branch: ${{ github.ref_name }}
+          name: ${{ steps.mod_info.outputs.artifact_name }}
+          path: ./downloaded_artifact
 
       - name: Create Tag
         run: |
@@ -48,5 +64,6 @@ jobs:
         with:
           tag_name: ${{ inputs.version }}
           name: ${{ inputs.version }}
+          body: ${{ inputs.description }}
           generate_release_notes: true
-          files: release/*.jar
+          files: ./downloaded_artifact/${{ steps.mod_info.outputs.dexed_jar_name }}

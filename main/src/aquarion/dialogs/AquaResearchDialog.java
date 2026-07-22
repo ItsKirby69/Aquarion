@@ -3,6 +3,7 @@ package aquarion.dialogs;
 import aquarion.ModEventHandler;
 import aquarion.content.AquaPlanets;
 import aquarion.ui.ModSettings;
+import aquarion.world.blocks.effect.ResearchServer;
 import aquarion.world.graphics.AquaFill;
 import arc.Core;
 import arc.Events;
@@ -58,6 +59,7 @@ import static mindustry.gen.Tex.buttonOver;
 
 public class AquaResearchDialog extends BaseDialog {
     public static boolean debugShowRequirements = false;
+    public static boolean autoResearch = false;
 
     public final float nodeSize = Scl.scl(60f);
     public ObjectSet<TechTreeNode> nodes = new ObjectSet<>();
@@ -79,6 +81,66 @@ public class AquaResearchDialog extends BaseDialog {
 
     /**The radii of each depth layer. Used to align layers.*/
     public IntFloatMap radii = new IntFloatMap();
+
+    public void autoSpend() {
+        if (!Vars.state.isCampaign() || Vars.state.getSector() == null) return;
+        int sectorId = Vars.state.getSector().id;
+        ObjectMap<Item, Integer> sectorResearch = ResearchServer.globalResearch.get(sectorId);
+        if (sectorResearch == null || sectorResearch.isEmpty()) return;
+
+        spendRecursive(root.node, sectorResearch);
+    }
+
+    private void spendRecursive(TechNode node, ObjectMap<Item, Integer> research) {
+        if (node == null) return;
+
+        // only recurse into children if this node is unlocked
+        if (!node.content.locked()) {
+            for (TechNode child : node.children) {
+                spendRecursive(child, research);
+            }
+            return;
+        }
+
+        // check objectives — must be complete before we can research
+        if (node.objectives.contains(o -> !o.complete())) {
+            return;
+        }
+
+        if (node.requirements.length == 0) {
+            node.content.unlock();
+            node.save();
+            for (TechNode child : node.children) {
+                spendRecursive(child, research);
+            }
+            return;
+        }
+
+        boolean allComplete = true;
+        for (int i = 0; i < node.requirements.length; i++) {
+            int remaining = node.requirements[i].amount - node.finishedRequirements[i].amount;
+            if (remaining <= 0) continue;
+            allComplete = false;
+
+            Item item = node.requirements[i].item;
+            int available = research.get(item, 0);
+            int used = Math.min(remaining, available);
+            if (used > 0) {
+                node.finishedRequirements[i].amount += used;
+                ResearchServer.removeResearch(item, used);
+                research.put(item, available - used);
+            }
+        }
+
+        if (allComplete) {
+            node.content.unlock();
+            node.save();
+        }
+
+        for (TechNode child : node.children) {
+            spendRecursive(child, research);
+        }
+    }
 
     public Seq<TechTreeNode> tmp1 = new Seq<>(), tmp2 = new Seq<>();
 
@@ -183,6 +245,8 @@ public class AquaResearchDialog extends BaseDialog {
             ui.database.show();
         }).size(210f, 64f).name("database");
 
+        buttons.button(Icon.wrench, Styles.clearNoneTogglei, iconMed, () -> autoResearch = !autoResearch).checked(b -> autoResearch).size(64f).name("autoResearch").tooltip("Auto-research");
+
         //scaling/drag input
         addListener(new InputListener() {
             @Override
@@ -241,47 +305,18 @@ public class AquaResearchDialog extends BaseDialog {
 
     public void rebuildItems() {
         items = new ItemSeq() {
-            final ObjectMap<Sector, ItemSeq> cache = new ObjectMap<>();
             {
-                Seq<Planet> rootPlanets = content.planets().select(p -> p.techTree == lastNode);
-                // Fallback if none found
-                if (rootPlanets.isEmpty()) {
-                    rootPlanets = Seq.with(Planets.serpulo);
-                }
-                // Add global counts from each planet's sectors
-                for (Planet planet : rootPlanets) {
-                    for (Sector sector : planet.sectors) {
-                        if (sector.hasBase()) {
-                            ItemSeq cached = sector.items();
-                            cache.put(sector, cached);
-                            cached.each((item, amount) -> {
-                                values[item.id] += Math.max(amount, 0);
-                                total += Math.max(amount, 0);
-                            });
-                        }
-                    }
+                ObjectMap<Item, Integer> allResearch = ResearchServer.getAllResearch();
+                for (ObjectMap.Entry<Item, Integer> entry : allResearch) {
+                    values[entry.key.id] += Math.max(entry.value, 0);
+                    total += Math.max(entry.value, 0);
                 }
             }
 
             @Override
             public void add(Item item, int amount) {
                 if (amount < 0) {
-                    amount = -amount;
-                    double percentage = (double) amount / get(item);
-                    int[] counter = {amount};
-
-                    cache.each((sector, seq) -> {
-                        if (counter[0] == 0) return;
-
-                        int toRemove = Math.min((int) Math.ceil(percentage * seq.get(item)), counter[0]);
-
-                        sector.removeItem(item, toRemove);
-                        seq.remove(item, toRemove);
-
-                        counter[0] -= toRemove;
-                    });
-
-                    amount = -amount;
+                    ResearchServer.removeResearch(item, -amount);
                 }
 
                 super.add(item, amount);
