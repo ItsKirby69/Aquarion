@@ -443,6 +443,7 @@ public class CoreBlocks {
             size = 2;
             buildVisibility = BuildVisibility.campaignOnly;
             researchCapacity = 500;
+            itemCapacity = 500;
             squareSprite = false;
             alwaysUnlocked = true;
             researchCostMultiplier = 0;
