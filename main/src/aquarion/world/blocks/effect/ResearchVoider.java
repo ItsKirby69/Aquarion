@@ -57,8 +57,10 @@ public class ResearchVoider extends Block {
             if (items.empty()) return;
             int sectorId = getSectorId();
             items.each((item, amount) -> {
-                ResearchServer.addResearch(sectorId, item, amount);
-            });
+                        ResearchServer.addResearch(sectorId, item, amount);
+                    });
+            //TODO separate the blast stuff from the floating items so I can throw a crap ton of disintegrating items out
+            AquaFx.vaporizeItem.at(x, y, 0, items.first());
             items.clear();
             processProg = 0f;
         }
@@ -88,6 +90,7 @@ public class ResearchVoider extends Block {
             warmup = Mathf.approachDelta(warmup, 1f, 0.02f);
             processProg += edelta() * processRate;
             if (processProg >= processTime) {
+
                 processBatch();
             }
         }
