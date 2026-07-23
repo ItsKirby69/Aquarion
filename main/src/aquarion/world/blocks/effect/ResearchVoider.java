@@ -68,6 +68,9 @@ public class ResearchVoider extends Block {
         @Override
         public void updateTile() {
             if (needsCatchUp) {
+                //Todo This is an awful setup. I don't know how to simulate blocks that are in another sector...
+                //I also suspect this will be increasingly laggy with the more voiders you make.
+                //Hope to god that isn't the case
                 needsCatchUp = false;
                 long now = System.currentTimeMillis();
                 if (lastSavedTime > 0 && now > lastSavedTime && !items.empty()) {
