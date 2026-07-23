@@ -325,6 +325,7 @@ public class GerbInfantryAI extends AIController {
                     .nor()
                     .scl(10f)
                     .add(unit);
+            //aaaa
 
             moveTo(Tmp.v1, 0f);
         }
